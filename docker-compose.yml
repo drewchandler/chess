@@ -1,0 +1,9 @@
+version: "3.7"
+services:
+  ui:
+    build: ./ui
+    volumes:
+      - ./ui/:/app
+      - /app/node_modules
+    ports:
+      - "3000:3000"
