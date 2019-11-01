@@ -1,11 +1,11 @@
-import React from "react";
+import React, { FunctionComponent } from "react";
+import GameDisplay from "./components/GameDisplay";
+import { buildGame } from "./models/Game";
 
-const App: React.FC = () => {
-  return (
-    <div>
-      <h1 className="text-purple-600">Sup?</h1>
-    </div>
-  );
+const App: FunctionComponent = () => {
+  const game = buildGame();
+
+  return <GameDisplay game={game} />;
 };
 
 export default App;
