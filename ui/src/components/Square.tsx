@@ -26,7 +26,7 @@ const sprites = [
 ];
 
 const Square: FunctionComponent<Props> = ({ index, piece }) => {
-  const isBlack = index % 2 === Math.floor(index / 8) % 2;
+  const isBlack = index % 2 !== Math.floor(index / 8) % 2;
   const content = piece && sprites[piece.player][piece.type];
 
   return (

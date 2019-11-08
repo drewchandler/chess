@@ -5,7 +5,7 @@ export enum PieceType {
   Rook = "ROOK",
   Queen = "QUEEN",
   King = "KING"
-};
+}
 
 export interface Piece {
   type: PieceType;
@@ -15,7 +15,7 @@ export interface Piece {
 export type Board = Array<Piece | undefined>;
 
 export interface Game {
-  board: Board
+  board: Board;
 }
 
 export const buildGame = (): Game => {
@@ -23,8 +23,8 @@ export const buildGame = (): Game => {
   board[0] = { type: PieceType.Rook, player: 0 };
   board[1] = { type: PieceType.Knight, player: 0 };
   board[2] = { type: PieceType.Bishop, player: 0 };
-  board[3] = { type: PieceType.Queen, player: 0 };
-  board[4] = { type: PieceType.King, player: 0 };
+  board[3] = { type: PieceType.King, player: 0 };
+  board[4] = { type: PieceType.Queen, player: 0 };
   board[5] = { type: PieceType.Bishop, player: 0 };
   board[6] = { type: PieceType.Knight, player: 0 };
   board[7] = { type: PieceType.Rook, player: 0 };
