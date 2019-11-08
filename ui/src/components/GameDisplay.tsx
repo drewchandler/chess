@@ -9,10 +9,12 @@ interface Props {
 
 const GameDisplay: FunctionComponent<Props> = ({ game }) => {
   return (
-    <div className="h-vmin w-vmin flex flex-wrap">
-      {range(0, 64).reverse().map(i => (
-        <Square key={i} index={i} piece={game.board[i]} />
-      ))}
+    <div className="border border-gray-700 w-3/4-vmin h-3/4-vmin m-8 flex flex-wrap">
+      {range(0, 64)
+        .reverse()
+        .map(i => (
+          <Square key={i} index={i} piece={game.board[i]} />
+        ))}
     </div>
   );
 };

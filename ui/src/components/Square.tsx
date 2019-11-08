@@ -13,7 +13,7 @@ const sprites = [
     [PieceType.Knight]: "♘",
     [PieceType.Pawn]: "♙",
     [PieceType.Queen]: "♕",
-    [PieceType.Rook]: "♖",
+    [PieceType.Rook]: "♖"
   },
   {
     [PieceType.Bishop]: "♝",
@@ -21,7 +21,7 @@ const sprites = [
     [PieceType.Knight]: "♞",
     [PieceType.Pawn]: "♟",
     [PieceType.Queen]: "♛",
-    [PieceType.Rook]: "♜",
+    [PieceType.Rook]: "♜"
   }
 ];
 
@@ -30,10 +30,15 @@ const Square: FunctionComponent<Props> = ({ index, piece }) => {
   const content = piece && sprites[piece.player][piece.type];
 
   return (
-    <div
-      className={`${isBlack && "bg-gray-600"} w-1/8 h-1/8 flex`}
-    >
-      {content && <p className="block m-auto text-6xl">{content}</p>}
+    <div className={`${isBlack && "bg-gray-600"} w-1/8 h-1/8 flex`}>
+      {content && (
+        <p
+          className="block m-auto text-6xl cursor-pointer select-none"
+          draggable={true}
+        >
+          {content}
+        </p>
+      )}
     </div>
   );
 };
