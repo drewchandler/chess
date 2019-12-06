@@ -7,3 +7,10 @@ services:
       - /app/node_modules
     ports:
       - "3000:3000"
+
+  api:
+    build: ./api
+    volumes:
+      - ./api/:/app
+    ports:
+      - "4000:4000"
