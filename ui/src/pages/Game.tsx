@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from "react";
-import Board from "./components/Board";
-import useGame from "./hooks/use-game";
-import { GameState } from "./models/Game";
+import Board from "../components/Board";
+import useGame from "../hooks/use-game";
+import { GameState } from "../models/Game";
 
 const App: FunctionComponent = () => {
   const [, game] = useGame("test");
