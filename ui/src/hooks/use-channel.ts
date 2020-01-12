@@ -1,16 +1,23 @@
-import { useContext, useEffect, useState } from "react";
-import SocketContext from "../contexts/socket";
+import { useEffect, useState } from "react";
 import { Channel } from "phoenix";
+import useSocket from "./use-socket";
 
 export default (
   name: string,
   onJoin?: (payload: any) => void
-): [any | undefined, Channel | undefined] => {
-  const socket = useContext(SocketContext);
+): { channel: Channel | undefined; error?: any } => {
+  const { socket } = useSocket() || {};
   const [channel, setChannel] = useState<Channel | undefined>();
   const [error, setError] = useState<any | undefined>();
 
   useEffect(() => {
+    if (!socket) {
+      setChannel(undefined);
+      setError(undefined);
+
+      return;
+    }
+
     const c = socket.channel(name);
 
     c.join()
@@ -29,5 +36,5 @@ export default (
     };
   }, [socket, name, onJoin]);
 
-  return [error, channel];
+  return { error, channel };
 };
