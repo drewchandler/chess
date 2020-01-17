@@ -8,7 +8,7 @@ import React, {
 
 interface SocketContextValue {
   socket?: Socket;
-  connect: () => void;
+  connect: (username: string) => void;
   disconnect: () => void;
 }
 
@@ -16,12 +16,12 @@ const socketContext = createContext<SocketContextValue | undefined>(undefined);
 
 export const ProvideSocket: FunctionComponent = ({ children }) => {
   const [socket, setSocket] = useState<Socket | undefined>(undefined);
-  const connect = () => {
+  const connect = (username: string) => {
     if (socket) {
       return;
     }
 
-    const newSocket = new Socket("/socket", { params: { token: "abcd" } });
+    const newSocket = new Socket("/socket", { params: { username } });
     newSocket.connect();
 
     setSocket(newSocket);
@@ -47,7 +47,7 @@ const useSocket = () => {
   const socketContextValue = useContext(socketContext);
 
   if (!socketContextValue) {
-    throw "Socket context not properly configured";
+    throw new Error("Socket context not properly configured");
   }
 
   return socketContextValue;

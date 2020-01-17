@@ -8,12 +8,12 @@ import useSocket from "./use-socket";
 import { useHistory } from "react-router-dom";
 
 interface User {
-  name: string;
+  username: string;
 }
 
 interface AuthContextValue {
   user?: User;
-  login: (name: string) => Promise<void>;
+  login: (name: string) => void;
   logout: () => void;
 }
 
@@ -24,10 +24,10 @@ export const ProvideAuth: FunctionComponent = ({ children }) => {
   const { connect } = useSocket();
   const history = useHistory();
 
-  const login = async (name: string) => {
-    setUser({ name });
-    connect();
-    history.push("/game");
+  const login = (username: string) => {
+    setUser({ username });
+    connect(username);
+    history.push("/lobby");
   };
 
   const logout = () => {
@@ -45,7 +45,7 @@ const useAuth = () => {
   const authContextValue = useContext(authContext);
 
   if (!authContextValue) {
-    throw "Auth context not properly configured";
+    throw new Error("Auth context not properly configured");
   }
 
   return authContextValue;

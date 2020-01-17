@@ -10,7 +10,7 @@ const useRequiredAuth = () => {
     if (!auth.user) {
       history.replace("/");
     }
-  }, [auth.user]);
+  }, [auth.user, history]);
 
   return auth;
 };

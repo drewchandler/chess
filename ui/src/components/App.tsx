@@ -4,6 +4,7 @@ import { ProvideAuth } from "../hooks/use-auth";
 import { ProvideSocket } from "../hooks/use-socket";
 import GamePage from "../pages/Game";
 import IndexPage from "../pages/Index";
+import LobbyPage from "../pages/Lobby";
 
 const App: FunctionComponent = () => {
   return (
@@ -11,12 +12,9 @@ const App: FunctionComponent = () => {
       <ProvideSocket>
         <ProvideAuth>
           <Switch>
-            <Route path="/game">
-              <GamePage />
-            </Route>
-            <Route path="/">
-              <IndexPage />
-            </Route>
+            <Route path="/lobby" component={LobbyPage} />
+            <Route path="/game" component={GamePage} />
+            <Route path="/" component={IndexPage} />
           </Switch>
         </ProvideAuth>
       </ProvideSocket>

@@ -1,21 +1,27 @@
-import React, { FunctionComponent, FormEvent, useState } from "react";
-import { Redirect } from "react-router-dom";
+import React, { FunctionComponent, useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import useAuth from "../hooks/use-auth";
 
 const IndexPage: FunctionComponent = () => {
   const { user, login } = useAuth();
-  const [name, setName] = useState("");
+  const history = useHistory();
 
-  if (user) return <Redirect to="/game" />;
+  useEffect(() => {
+    if (user) {
+      history.replace("/lobby");
+    }
+  }, [history, user]);
+
+  const [username, setUsername] = useState("");
 
   const onSubmit = () => {
-    login(name);
+    login(username);
   };
 
   return (
     <form onSubmit={onSubmit}>
       <label htmlFor="name">Name</label>
-      <input id="name" onInput={e => setName(e.currentTarget.value)} />
+      <input id="name" onInput={e => setUsername(e.currentTarget.value)} />
       <button type="submit">Log in</button>
     </form>
   );
