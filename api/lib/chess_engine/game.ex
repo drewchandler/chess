@@ -1,7 +1,10 @@
 defmodule ChessEngine.Game do
   alias ChessEngine.{Board, Pieces.Pawn}
 
+  @enforce_keys [:board, :players, :state]
   defstruct [:board, :players, :state]
+
+  def new(fields), do: struct!(__MODULE__, fields)
 
   def move(game, player, from, to) do
     with {:ok, color} <- color_for_player(game, player),

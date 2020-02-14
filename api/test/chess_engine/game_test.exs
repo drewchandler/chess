@@ -4,50 +4,53 @@ defmodule ChessEngine.GameTest do
   alias ChessEngine.{Board, Game, Piece, Position}
 
   test "you cannot move a nonexistent piece" do
-    from = %Position{x: 0, y: 5}
-    to = %Position{x: 0, y: 6}
+    from = Position.new(0, 5)
+    to = Position.new(0, 6)
 
-    game = %Game{
-      players: ["white", "black"],
-      state: :white_turn,
-      board: %{}
-    }
+    game =
+      Game.new(
+        players: ["white", "black"],
+        state: :white_turn,
+        board: %{}
+      )
 
     assert Game.move(game, "white", from, to) ==
              {:error, "There is not a piece in that position."}
   end
 
   test "you cannot move another players piece" do
-    from = %Position{x: 0, y: 5}
-    to = %Position{x: 0, y: 6}
+    from = Position.new(0, 5)
+    to = Position.new(0, 6)
 
     board = %{
-      from => %Piece{type: :pawn, color: :black}
+      from => Piece.new(:pawn, :black)
     }
 
-    game = %Game{
-      players: ["white", "black"],
-      state: :white_turn,
-      board: board
-    }
+    game =
+      Game.new(
+        players: ["white", "black"],
+        state: :white_turn,
+        board: board
+      )
 
     assert Game.move(game, "white", from, to) ==
              {:error, "That piece does not belong to you."}
   end
 
   test "you can not move when it is not your turn" do
-    from = %Position{x: 0, y: 5}
-    to = %Position{x: 0, y: 6}
+    from = Position.new(0, 5)
+    to = Position.new(0, 6)
 
     board = %{
-      from => %Piece{type: :pawn, color: :black}
+      from => Piece.new(:pawn, :black)
     }
 
-    game = %Game{
-      players: ["white", "black"],
-      state: :white_turn,
-      board: board
-    }
+    game =
+      Game.new(
+        players: ["white", "black"],
+        state: :white_turn,
+        board: board
+      )
 
     assert Game.move(game, "black", from, to) ==
              {:error, "It is not your turn."}
@@ -55,25 +58,21 @@ defmodule ChessEngine.GameTest do
 
   test "when a valid move is made, the board is updated and the turn is passed to the other player" do
     active_color = :white
-    from = %Position{x: 0, y: 5}
-    to = %Position{x: 0, y: 6}
+    from = Position.new(0, 5)
+    to = Position.new(0, 6)
 
     board = %{
-      from => %Piece{type: :pawn, color: active_color}
+      from => Piece.new(:pawn, active_color)
     }
 
-    game = %Game{
-      players: ["white", "black"],
-      state: :white_turn,
-      board: board
-    }
+    game =
+      Game.new(
+        players: ["white", "black"],
+        state: :white_turn,
+        board: board
+      )
 
     assert Game.move(game, "white", from, to) ==
-             {:ok,
-              %{
-                game
-                | state: :black_turn,
-                  board: %{to => %Piece{type: :pawn, color: active_color}}
-              }}
+             {:ok, %{game | state: :black_turn, board: %{to => Piece.new(:pawn, active_color)}}}
   end
 end
