@@ -4,7 +4,12 @@ defmodule ChessEngine.Game do
   @enforce_keys [:board, :players, :state]
   defstruct [:board, :players, :state]
 
-  def new(fields), do: struct!(__MODULE__, fields)
+  def new(fields) do
+    struct!(
+      __MODULE__,
+      Keyword.merge([board: Board.initial_board(), state: :white_turn], fields)
+    )
+  end
 
   def move(game, player, from, to) do
     with {:ok, color} <- color_for_player(game, player),
@@ -54,4 +59,19 @@ defmodule ChessEngine.Game do
   defp next_turn(%{state: :white_turn}), do: :black_turn
   defp next_turn(%{state: :black_turn}), do: :white_turn
   defp next_turn(%{state: state}), do: state
+end
+
+defimpl Jason.Encoder, for: [ChessEngine.Game] do
+  def encode(game, opts) do
+    Map.take(game, [:players, :state])
+    |> Map.put(
+      :board,
+      for(
+        {position, piece} <- game.board,
+        into: %{},
+        do: {position.y * 8 + position.x, piece}
+      )
+    )
+    |> Jason.Encode.map(opts)
+  end
 end

@@ -1,15 +1,20 @@
 export enum PieceType {
-  Pawn = 0,
-  Rook = 1,
-  Knight = 2,
-  Bishop = 3,
-  Queen = 4,
-  King = 5
+  Pawn = "pawn",
+  Rook = "rook",
+  Knight = "knight",
+  Bishop = "bishop",
+  Queen = "queen",
+  King = "king"
+}
+
+export enum Color {
+  White = "white",
+  Black = "black"
 }
 
 export interface Piece {
   type: PieceType;
-  player: number;
+  color: Color;
 }
 
 export type Board = Array<Piece | undefined>;
