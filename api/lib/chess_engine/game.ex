@@ -63,7 +63,8 @@ end
 
 defimpl Jason.Encoder, for: [ChessEngine.Game] do
   def encode(game, opts) do
-    Map.take(game, [:players, :state])
+    game
+    |> Map.take([:players, :state])
     |> Map.put(
       :board,
       for(

@@ -36,7 +36,7 @@ defmodule ChessEngine.Board do
     Position.new(7, 7) => Piece.new(:rook, :black)
   }
 
-  def initial_board(), do: @initial_board
+  def initial_board, do: @initial_board
 
   def move(board, from, to) do
     {piece, board} = Map.pop(board, from)
