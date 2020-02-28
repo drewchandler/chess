@@ -1,18 +1,12 @@
 defmodule ChessEngine.GameTest do
   use ExUnit.Case
-
-  alias ChessEngine.{Board, Game, Piece, Position}
+  use GameBuilders
 
   test "you cannot move a nonexistent piece" do
     from = Position.new(0, 5)
     to = Position.new(0, 6)
 
-    game =
-      Game.new(
-        players: ["white", "black"],
-        state: :white_turn,
-        board: %{}
-      )
+    game = build_game()
 
     assert Game.move(game, "white", from, to) ==
              {:error, "There is not a piece in that position."}
@@ -26,12 +20,7 @@ defmodule ChessEngine.GameTest do
       from => Piece.new(:pawn, :black)
     }
 
-    game =
-      Game.new(
-        players: ["white", "black"],
-        state: :white_turn,
-        board: board
-      )
+    game = build_game(board: board)
 
     assert Game.move(game, "white", from, to) ==
              {:error, "That piece does not belong to you."}
@@ -45,34 +34,23 @@ defmodule ChessEngine.GameTest do
       from => Piece.new(:pawn, :black)
     }
 
-    game =
-      Game.new(
-        players: ["white", "black"],
-        state: :white_turn,
-        board: board
-      )
+    game = build_game(board: board)
 
     assert Game.move(game, "black", from, to) ==
              {:error, "It is not your turn."}
   end
 
   test "when a valid move is made, the board is updated and the turn is passed to the other player" do
-    active_color = :white
     from = Position.new(0, 5)
     to = Position.new(0, 6)
 
     board = %{
-      from => Piece.new(:pawn, active_color)
+      from => Piece.new(:pawn, :white)
     }
 
-    game =
-      Game.new(
-        players: ["white", "black"],
-        state: :white_turn,
-        board: board
-      )
+    game = build_game(board: board)
 
     assert Game.move(game, "white", from, to) ==
-             {:ok, %{game | state: :black_turn, board: %{to => Piece.new(:pawn, active_color)}}}
+             {:ok, %{game | state: :black_turn, board: %{to => Piece.new(:pawn, :white)}}}
   end
 end
