@@ -1,5 +1,5 @@
-defmodule ChessEngine.GameSession do
-  alias ChessEngine.Game
+defmodule Chess.GameSession do
+  alias Chess.Game
 
   use GenServer
 

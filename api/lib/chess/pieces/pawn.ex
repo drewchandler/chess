@@ -1,5 +1,5 @@
-defmodule ChessEngine.Pieces.Pawn do
-  alias ChessEngine.{Board, Position}
+defmodule Chess.Pieces.Pawn do
+  alias Chess.{Board, Position}
 
   def legal_move?(board, color, from, to) do
     Enum.member?(moves(board, color, from), to)
