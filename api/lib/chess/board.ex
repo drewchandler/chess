@@ -1,5 +1,5 @@
-defmodule ChessEngine.Board do
-  alias ChessEngine.{Piece, Position}
+defmodule Chess.Board do
+  alias Chess.{Piece, Position}
 
   @initial_board %{
     Position.new(0, 0) => Piece.new(:rook, :white),

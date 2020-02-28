@@ -1,5 +1,5 @@
-defmodule ChessEngine.Game do
-  alias ChessEngine.{Board, Pieces.Pawn}
+defmodule Chess.Game do
+  alias Chess.{Board, Pieces.Pawn}
 
   @enforce_keys [:board, :players, :state]
   defstruct [:board, :players, :state]
@@ -59,7 +59,7 @@ defmodule ChessEngine.Game do
   defp next_turn(%{state: state}), do: state
 end
 
-defimpl Jason.Encoder, for: [ChessEngine.Game] do
+defimpl Jason.Encoder, for: [Chess.Game] do
   def encode(game, opts) do
     game
     |> Map.take([:players, :state])

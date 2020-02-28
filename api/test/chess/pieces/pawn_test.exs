@@ -1,7 +1,7 @@
-defmodule ChessEngine.Pieces.PawnTest do
+defmodule Chess.Pieces.PawnTest do
   use ExUnit.Case
 
-  alias ChessEngine.{Piece, Pieces.Pawn, Position}
+  alias Chess.{Piece, Pieces.Pawn, Position}
 
   test "white pawns can move up one space" do
     position = Position.new(0, 5)
