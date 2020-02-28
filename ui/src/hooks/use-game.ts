@@ -2,10 +2,21 @@ import { useState, useCallback } from "react";
 import useChannel from "./use-channel";
 import { Game, GameState } from "../models/Game";
 
-export default (name: string): { game: Game; error?: any } => {
+interface GameDispatch {
+  move(from: number, to: number): void;
+}
+
+export default (
+  name: string
+): { game: Game; error?: any; dispatch: GameDispatch } => {
   const [game, setGame] = useState<Game>({ state: GameState.Loading });
   const onJoin = useCallback(payload => setGame(payload.game), [setGame]);
-  const { error } = useChannel(`game:${name}`, onJoin);
+  const { error, channel } = useChannel(`game:${name}`, onJoin);
+  const dispatch = {
+    move(from: number, to: number): void {
+      channel && channel.push("move", { from, to });
+    }
+  };
 
-  return { game, error };
+  return { game, error, dispatch };
 };

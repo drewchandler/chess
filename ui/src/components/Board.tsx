@@ -5,9 +5,10 @@ import { Board as BoardType } from "../models/Game";
 
 interface Props {
   board: BoardType;
+  move: (from: number, to: number) => void;
 }
 
-const Board: FunctionComponent<Props> = ({ board }) => {
+const Board: FunctionComponent<Props> = ({ board, move }) => {
   return (
     <div className="border border-gray-700 w-3/4-vmin h-3/4-vmin m-8 flex flex-wrap">
       {range(0, 8)
@@ -16,7 +17,14 @@ const Board: FunctionComponent<Props> = ({ board }) => {
           range(0, 8).flatMap(x => {
             const index = y * 8 + x;
 
-            return <Square key={index} index={index} piece={board[index]} />;
+            return (
+              <Square
+                key={index}
+                index={index}
+                piece={board[index]}
+                move={move}
+              />
+            );
           })
         )}
     </div>

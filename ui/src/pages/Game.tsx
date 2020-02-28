@@ -6,14 +6,14 @@ import { GameState } from "../models/Game";
 
 const GamePage: FunctionComponent = () => {
   useRequiredAuth();
-  const { game } = useGame("test");
+  const { game, dispatch } = useGame("test");
 
   return game.state === GameState.Loading ? (
     <div>Loading</div>
   ) : (
     <div className="flex w-screen h-screen justify-between">
       <div className="flex items-center justify-center w-full h-full">
-        <Board board={game.board} />
+        <Board board={game.board} move={dispatch.move} />
       </div>
       <div className="flex flex-col flex-shrink-0 w-1/4">
         <div>Clock</div>
