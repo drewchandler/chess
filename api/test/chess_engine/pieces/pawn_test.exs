@@ -6,9 +6,7 @@ defmodule ChessEngine.Pieces.PawnTest do
   test "white pawns can move up one space" do
     position = Position.new(0, 5)
 
-    board = %{
-      position => Piece.new(:pawn, :white)
-    }
+    board = %{position => Piece.new(:pawn, :white)}
 
     assert Pawn.moves(board, :white, position) == [Position.new(0, 6)]
   end
@@ -16,9 +14,7 @@ defmodule ChessEngine.Pieces.PawnTest do
   test "white pawns can move up two spaces on the second row" do
     position = Position.new(0, 1)
 
-    board = %{
-      position => Piece.new(:pawn, :white)
-    }
+    board = %{position => Piece.new(:pawn, :white)}
 
     assert Pawn.moves(board, :white, position) == [Position.new(0, 2), Position.new(0, 3)]
   end
@@ -26,9 +22,7 @@ defmodule ChessEngine.Pieces.PawnTest do
   test "black pawns can move down one space" do
     position = Position.new(0, 5)
 
-    board = %{
-      position => Piece.new(:pawn, :black)
-    }
+    board = %{position => Piece.new(:pawn, :black)}
 
     assert Pawn.moves(board, :black, position) == [Position.new(0, 4)]
   end
@@ -36,9 +30,7 @@ defmodule ChessEngine.Pieces.PawnTest do
   test "black pawns can move down two spaces on the seventh row" do
     position = Position.new(0, 6)
 
-    board = %{
-      position => Piece.new(:pawn, :black)
-    }
+    board = %{position => Piece.new(:pawn, :black)}
 
     assert Pawn.moves(board, :black, position) == [Position.new(0, 5), Position.new(0, 4)]
   end
