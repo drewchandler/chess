@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import useChannel from "./use-channel";
 import { Game, GameState } from "../models/Game";
 
@@ -17,6 +17,16 @@ export default (
       channel && channel.push("move", { from, to });
     }
   };
+
+  useEffect(() => {
+    if (!channel) {
+      return;
+    }
+
+    channel.on("update", payload => {
+      setGame(payload.game);
+    });
+  }, [channel]);
 
   return { game, error, dispatch };
 };
