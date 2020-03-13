@@ -18,7 +18,7 @@ defmodule Chess.Pieces.Pawn do
 
   defp attacking_moves(board, :white, %{x: x, y: y}) do
     Enum.filter(
-      [Position.new(x - 1, y + 1), Position.new(1, y + 1)],
+      [Position.new(x - 1, y + 1), Position.new(x + 1, y + 1)],
       &Board.occupied_by_color?(board, &1, :black)
     )
   end
