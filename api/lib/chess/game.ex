@@ -58,19 +58,3 @@ defmodule Chess.Game do
   defp next_turn(%{state: :black_turn}), do: :white_turn
   defp next_turn(%{state: state}), do: state
 end
-
-defimpl Jason.Encoder, for: [Chess.Game] do
-  def encode(game, opts) do
-    game
-    |> Map.take([:players, :state])
-    |> Map.put(
-      :board,
-      for(
-        {position, piece} <- game.board,
-        into: %{},
-        do: {position.y * 8 + position.x, piece}
-      )
-    )
-    |> Jason.Encode.map(opts)
-  end
-end
