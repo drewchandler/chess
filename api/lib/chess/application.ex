@@ -8,10 +8,9 @@ defmodule Chess.Application do
   def start(_type, _args) do
     # List all child processes to be supervised
     children = [
-      # Start the endpoint when the application starts
-      ChessWeb.Endpoint
-      # Starts a worker by calling: Chess.Worker.start_link(arg)
-      # {Chess.Worker, arg},
+      ChessWeb.Endpoint,
+      {Registry, [name: Chess.Registry.GameSession, keys: :unique]},
+      {DynamicSupervisor, [name: Chess.Supervisor.GameSession, strategy: :one_for_one]}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

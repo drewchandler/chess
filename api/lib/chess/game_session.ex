@@ -3,6 +3,37 @@ defmodule Chess.GameSession do
 
   use GenServer
 
+  def child_spec({name, players}) do
+    %{
+      id: {__MODULE__, name},
+      start: {__MODULE__, :start_link, [{name, players}]},
+      restart: :temporary
+    }
+  end
+
+  def start_link({name, players}) do
+    GenServer.start_link(__MODULE__, players, name: via(name))
+  end
+
+  def via(name) do
+    {:via, Registry, {Chess.Registry.GameSession, name}}
+  end
+
+  def start_game(name, players) do
+    DynamicSupervisor.start_child(
+      Chess.Supervisor.GameSession,
+      {__MODULE__, {name, players}}
+    )
+  end
+
+  def move(name, player, from, to) do
+    GenServer.call(via(name), {:move, player, from, to})
+  end
+
+  def current_state(name) do
+    GenServer.call(via(name), :current_state)
+  end
+
   def init(players) do
     players
     |> Enum.shuffle()
@@ -18,13 +49,5 @@ defmodule Chess.GameSession do
 
   def handle_call(:current_state, _from, game) do
     {:reply, game, game}
-  end
-
-  def move(session, player, from, to) do
-    GenServer.call(session, {:move, player, from, to})
-  end
-
-  def current_state(session) do
-    GenServer.call(session, :current_state)
   end
 end
