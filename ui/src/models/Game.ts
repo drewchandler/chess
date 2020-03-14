@@ -19,14 +19,7 @@ export interface Piece {
 
 export type Board = Array<Piece | undefined>;
 
-export enum GameState {
-  Loading = "loading",
-  InProgress = "in-progress"
-}
-
-export type Game =
-  | { state: GameState.Loading }
-  | {
-      state: GameState.InProgress;
-      board: Board;
-    };
+export type Game = {
+  board: Board;
+  players: String[];
+};
