@@ -1,14 +1,20 @@
-import React, { FunctionComponent } from "react";
-import { Link } from "react-router-dom";
+import React, { FunctionComponent, useState } from "react";
 import useRequiredAuth from "../hooks/use-required-auth";
+import MatchmakingQueue from "../components/MatchmakingQueue";
 
 const LobbyPage: FunctionComponent = () => {
-  useRequiredAuth();
+  const { user } = useRequiredAuth();
+  const [inQueue, setInQueue] = useState(false);
+
+  if (!user) {
+    return <></>;
+  }
 
   return (
     <>
       <h1>Lobby</h1>
-      <Link to="/game">Game</Link>
+      <button onClick={() => setInQueue(true)}>Play</button>
+      {inQueue && <MatchmakingQueue user={user} />}
     </>
   );
 };

@@ -3,12 +3,8 @@ defmodule ChessWeb.GameChannel do
 
   use ChessWeb, :channel
 
-  def join("game:" <> game_id, _payload, socket) do
-    if Registry.lookup(Chess.Registry.GameSession, game_id) == [] do
-      GameSession.start_game(game_id, [socket.assigns.username, "opponent"])
-    end
-
-    {:ok, %{game: GameSession.current_state(game_id)}, socket}
+  def join("game:" <> name, _payload, socket) do
+    {:ok, %{game: GameSession.current_state(name)}, socket}
   end
 
   def handle_in("move", %{"from" => raw_from, "to" => raw_to}, socket) do
@@ -23,7 +19,7 @@ defmodule ChessWeb.GameChannel do
     end
   end
 
-  defp via("game:" <> game_id), do: game_id
+  defp via("game:" <> name), do: name
 
   defp translate_position(num) when num < 0 or num > 63 do
     {:error, "Position is out of bounds"}

@@ -7,7 +7,7 @@ import React, {
 import useSocket from "./use-socket";
 import { useHistory } from "react-router-dom";
 
-interface User {
+export interface User {
   username: string;
 }
 

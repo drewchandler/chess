@@ -3,6 +3,7 @@ defmodule ChessWeb.UserSocket do
 
   ## Channels
   channel("game:*", ChessWeb.GameChannel)
+  channel("matchmaking:*", ChessWeb.MatchmakingChannel)
 
   # Socket params are passed from the client and can
   # be used to verify and authenticate a user. After

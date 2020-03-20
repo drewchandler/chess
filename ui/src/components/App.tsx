@@ -13,7 +13,7 @@ const App: FunctionComponent = () => {
         <ProvideAuth>
           <Switch>
             <Route path="/lobby" component={LobbyPage} />
-            <Route path="/game" component={GamePage} />
+            <Route path="/game/:name" component={GamePage} />
             <Route path="/" component={IndexPage} />
           </Switch>
         </ProvideAuth>
