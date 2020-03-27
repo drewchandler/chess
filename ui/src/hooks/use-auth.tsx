@@ -6,6 +6,7 @@ import React, {
   useEffect
 } from "react";
 import useSocket from "./use-socket";
+import { useHistory } from "react-router-dom";
 
 export interface User {
   username: string;
@@ -22,6 +23,7 @@ const authContext = createContext<AuthContextValue | undefined>(undefined);
 const USER_LOCAL_STORAGE_KEY = "user";
 
 export const ProvideAuth: FunctionComponent = ({ children }) => {
+  const history = useHistory();
   const [user, setUser] = useState<User | undefined>(() => {
     const user = window.localStorage.getItem(USER_LOCAL_STORAGE_KEY);
 
@@ -41,6 +43,7 @@ export const ProvideAuth: FunctionComponent = ({ children }) => {
     setUser(undefined);
     window.localStorage.removeItem(USER_LOCAL_STORAGE_KEY);
     disconnect();
+    history.push("/");
   };
 
   return (
