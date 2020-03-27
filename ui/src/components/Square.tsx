@@ -1,16 +1,15 @@
 import React, { FunctionComponent } from "react";
-import { Piece } from "../models/Game";
-import sprite from "../sprites/chess_pieces.svg";
+import { Piece as PieceModel } from "../models/Game";
+import Piece from "./Piece";
 
 interface Props {
   index: number;
-  piece: Piece | undefined;
+  piece: PieceModel | undefined;
   move: (from: number, to: number) => void;
 }
 
 const Square: FunctionComponent<Props> = ({ index, piece, move }) => {
   const isBlack = index % 2 === Math.floor(index / 8) % 2;
-  const spriteUrl = piece && `${sprite}#${piece.color}-${piece.type}`;
 
   return (
     <div
@@ -21,14 +20,15 @@ const Square: FunctionComponent<Props> = ({ index, piece, move }) => {
         move(parseInt(e.dataTransfer.getData("text/plain"), 10), index)
       }
     >
-      {spriteUrl && (
+      {piece && (
         <div
           draggable={true}
           onDragStart={e => e.dataTransfer.setData("text/plain", "" + index)}
         >
-          <svg className="w-full h-full cursor-pointer select-none">
-            <use href={spriteUrl} />
-          </svg>
+          <Piece
+            piece={piece}
+            className="w-full h-full cursor-pointer select-none"
+          />
         </div>
       )}
     </div>
