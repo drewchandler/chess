@@ -1,18 +1,14 @@
 import React, { FunctionComponent } from "react";
 import Board from "../components/Board";
 import useGame from "../hooks/use-game";
-import useRequiredAuth from "../hooks/use-required-auth";
 import { Color } from "../models/Game";
 import { useParams } from "react-router-dom";
+import useAuth from "../hooks/use-auth";
 
 const GamePage: FunctionComponent = () => {
-  const { user } = useRequiredAuth();
+  const user = useAuth().user!;
   const { name } = useParams();
   const { game, dispatch } = useGame(name!);
-
-  if (!user) {
-    return <></>;
-  }
 
   if (!game) {
     return <div>Loading</div>;

@@ -1,14 +1,10 @@
 import React, { FunctionComponent, useState } from "react";
-import useRequiredAuth from "../hooks/use-required-auth";
 import MatchmakingQueue from "../components/MatchmakingQueue";
+import useAuth from "../hooks/use-auth";
 
 const LobbyPage: FunctionComponent = () => {
-  const { user } = useRequiredAuth();
+  const user = useAuth().user!;
   const [inQueue, setInQueue] = useState(false);
-
-  if (!user) {
-    return <></>;
-  }
 
   return (
     <>

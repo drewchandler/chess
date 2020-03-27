@@ -5,7 +5,6 @@ import React, {
   useContext
 } from "react";
 import useSocket from "./use-socket";
-import { useHistory } from "react-router-dom";
 
 export interface User {
   username: string;
@@ -22,12 +21,10 @@ const authContext = createContext<AuthContextValue | undefined>(undefined);
 export const ProvideAuth: FunctionComponent = ({ children }) => {
   const [user, setUser] = useState<User | undefined>(undefined);
   const { connect } = useSocket();
-  const history = useHistory();
 
   const login = (username: string) => {
     setUser({ username });
     connect(username);
-    history.push("/lobby");
   };
 
   const logout = () => {

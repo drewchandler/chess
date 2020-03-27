@@ -12,12 +12,6 @@ export default (
   const [game, setGame] = useState<Game | undefined>();
   const onJoin = useCallback(payload => setGame(payload.game), [setGame]);
   const { error, channel } = useChannel(`game:${name}`, onJoin);
-  const dispatch = {
-    move(from: number, to: number): void {
-      channel && channel.push("move", { from, to });
-    }
-  };
-
   useEffect(() => {
     if (!channel) {
       return;
@@ -27,6 +21,12 @@ export default (
       setGame(payload.game);
     });
   }, [channel]);
+
+  const dispatch = {
+    move(from: number, to: number): void {
+      channel && channel.push("move", { from, to });
+    }
+  };
 
   return { game, error, dispatch };
 };
