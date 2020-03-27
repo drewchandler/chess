@@ -1,9 +1,10 @@
 import React, { FunctionComponent } from "react";
 import Board from "../components/Board";
 import useGame from "../hooks/use-game";
-import { Color } from "../models/Game";
+import { getPlayerColor } from "../models/Game";
 import { useParams } from "react-router-dom";
 import useAuth from "../hooks/use-auth";
+import Players from "../components/Players";
 
 const GamePage: FunctionComponent = () => {
   const user = useAuth().user!;
@@ -14,8 +15,7 @@ const GamePage: FunctionComponent = () => {
     return <div>Loading</div>;
   }
 
-  const playerColor =
-    game.players[0] === user.username ? Color.White : Color.Black;
+  const playerColor = getPlayerColor(game, user.username);
 
   return (
     <div className="flex w-screen h-screen justify-between">
@@ -26,10 +26,8 @@ const GamePage: FunctionComponent = () => {
           move={dispatch.move}
         />
       </div>
-      <div className="flex flex-col flex-shrink-0 w-1/4">
-        <div>Clock</div>
-        <div>History</div>
-        <div>Chat</div>
+      <div className="flex flex-col flex-shrink-0 w-1/4 justify-center">
+        <Players game={game} playerColor={playerColor} />
       </div>
     </div>
   );
