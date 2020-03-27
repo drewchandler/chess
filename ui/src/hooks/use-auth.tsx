@@ -20,7 +20,7 @@ const authContext = createContext<AuthContextValue | undefined>(undefined);
 
 export const ProvideAuth: FunctionComponent = ({ children }) => {
   const [user, setUser] = useState<User | undefined>(undefined);
-  const { connect } = useSocket();
+  const { connect, disconnect } = useSocket();
 
   const login = (username: string) => {
     setUser({ username });
@@ -29,6 +29,7 @@ export const ProvideAuth: FunctionComponent = ({ children }) => {
 
   const logout = () => {
     setUser(undefined);
+    disconnect();
   };
 
   return (
