@@ -15,8 +15,8 @@
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
     "react-router-dom": "^5.1.2",
-    "react-scripts": "3.2.0",
-    "typescript": "3.6.4"
+    "react-scripts": "3.4.1",
+    "typescript": "3.8.3"
   },
   "scripts": {
     "build:css": "postcss src/styles/index.css -o src/index.css",

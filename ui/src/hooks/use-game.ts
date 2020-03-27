@@ -24,7 +24,7 @@ export default (
 
   const dispatch = {
     move(from: number, to: number): void {
-      channel && channel.push("move", { from, to });
+      channel?.push("move", { from, to });
     }
   };
 
