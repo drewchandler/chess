@@ -7,7 +7,7 @@ const AuthenticatedHeader: FunctionComponent = () => {
   const { user, logout } = useAuth();
 
   return (
-    <div className="text-white bg-blue-700 px-4 py-2 flex fixed w-full">
+    <div className="text-white bg-blue-700 px-4 py-2 flex fixed items-center w-full">
       <div className="w-5/6 flex">
         <Piece
           piece={{ color: Color.Black, type: PieceType.Knight }}
