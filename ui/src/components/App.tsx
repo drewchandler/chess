@@ -6,7 +6,11 @@ import UnauthenticatedApp from "./UnauthenticatedApp";
 const App: FunctionComponent = () => {
   const { user } = useAuth();
 
-  return user ? <AuthenticatedApp /> : <UnauthenticatedApp />;
+  return (
+    <div className="font-sans bg-gray-100 w-screen h-screen">
+      {user ? <AuthenticatedApp /> : <UnauthenticatedApp />}
+    </div>
+  );
 };
 
 export default App;

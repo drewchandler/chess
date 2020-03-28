@@ -1,14 +1,16 @@
-import React, { FunctionComponent, useState, useEffect } from "react";
+import React, { FunctionComponent, useEffect, useState } from "react";
+import { Link, useHistory } from "react-router-dom";
 import { User } from "../hooks/use-auth";
 import useChannel from "../hooks/use-channel";
-import { Link } from "react-router-dom";
+import { ReactComponent as LoadingSpinner } from "../svgs/loading.svg";
 
 interface Props {
   user: User;
+  leaveQueue: () => void;
 }
 
-const MatchmakingQueue: FunctionComponent<Props> = ({ user }) => {
-  const [gameName, setGameName] = useState<string | undefined>();
+const MatchmakingQueue: FunctionComponent<Props> = ({ user, leaveQueue }) => {
+  const history = useHistory();
   const { channel } = useChannel(`matchmaking:${user.username}`);
   useEffect(() => {
     if (!channel) {
@@ -16,14 +18,20 @@ const MatchmakingQueue: FunctionComponent<Props> = ({ user }) => {
     }
 
     channel.on("matched", data => {
-      setGameName(data.name);
+      history.push(`/game/${data.name}`);
     });
   }, [channel]);
 
-  return gameName ? (
-    <Link to={`/game/${gameName}`}>Join</Link>
-  ) : (
-    <span>Waiting...</span>
+  return (
+    <div className="w-1/4 border border-gray-700 bg-white p-4 rounded shadow flex flex-col items-center justify-center">
+      <LoadingSpinner />
+      <button
+        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+        onClick={leaveQueue}
+      >
+        Cancel
+      </button>
+    </div>
   );
 };
 

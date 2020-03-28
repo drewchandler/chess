@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from "react";
 import { Piece as PieceModel } from "../models/Game";
-import sprite from "../sprites/chess_pieces.svg";
+import sprite from "../svgs/chess_pieces.svg";
 
 interface Props {
   piece: PieceModel;

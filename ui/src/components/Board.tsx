@@ -19,7 +19,7 @@ const Board: FunctionComponent<Props> = ({ board, playerColor, move }) => {
   }
 
   return (
-    <div className="border border-gray-700 w-3/4-vmin h-3/4-vmin m-8 flex flex-wrap">
+    <div className="bg-white border border-gray-700 rounded shadow w-3/4-vmin h-3/4-vmin m-8 flex flex-wrap">
       {rows.map(y =>
         cols.flatMap(x => {
           const index = y * 8 + x;
