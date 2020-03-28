@@ -24,11 +24,11 @@ export enum State {
 
 export type Board = Array<Piece | undefined>;
 
-export type Game = {
+export interface Game {
   board: Board;
-  players: String[];
+  players: string[];
   state: State;
-};
+}
 
 export const getPlayerColor = (game: Game, player: string) => {
   return game.players[0] === player ? Color.White : Color.Black;

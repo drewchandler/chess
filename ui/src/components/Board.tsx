@@ -1,7 +1,7 @@
 import range from "lodash/range";
 import React, { FunctionComponent } from "react";
-import Square from "./Square";
 import { Board as BoardType, Color } from "../models/Game";
+import Square from "./Square";
 
 interface Props {
   board: BoardType;

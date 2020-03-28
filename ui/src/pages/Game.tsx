@@ -1,10 +1,10 @@
 import React, { FunctionComponent } from "react";
+import { useParams } from "react-router-dom";
 import Board from "../components/Board";
+import Players from "../components/Players";
+import useAuth from "../hooks/use-auth";
 import useGame from "../hooks/use-game";
 import { getPlayerColor } from "../models/Game";
-import { useParams } from "react-router-dom";
-import useAuth from "../hooks/use-auth";
-import Players from "../components/Players";
 
 const GamePage: FunctionComponent = () => {
   const user = useAuth().user!;

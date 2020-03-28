@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
 import { Channel } from "phoenix";
+import { useEffect, useState } from "react";
 import useSocket from "./use-socket";
 
 export default (
@@ -24,7 +24,9 @@ export default (
       .receive("ok", payload => {
         setChannel(c);
         setError(undefined);
-        if (onJoin) onJoin(payload);
+        if (onJoin) {
+          onJoin(payload);
+        }
       })
       .receive("error", payload => {
         setChannel(undefined);
