@@ -1,5 +1,5 @@
-import React, { FunctionComponent, useEffect, useState } from "react";
-import { Link, useHistory } from "react-router-dom";
+import React, { FunctionComponent, useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import { User } from "../hooks/use-auth";
 import useChannel from "../hooks/use-channel";
 import { ReactComponent as LoadingSpinner } from "../svgs/loading.svg";
@@ -17,10 +17,14 @@ const MatchmakingQueue: FunctionComponent<Props> = ({ user, leaveQueue }) => {
       return;
     }
 
-    channel.on("matched", data => {
+    const ref = channel.on("matched", data => {
       history.push(`/game/${data.name}`);
     });
-  }, [channel]);
+
+    return () => {
+      channel.off("matched", ref);
+    };
+  }, [channel, history]);
 
   return (
     <div className="w-1/4 border border-gray-700 bg-white p-4 rounded shadow flex flex-col items-center justify-center">
