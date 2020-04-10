@@ -1,5 +1,5 @@
 defmodule Chess.Game do
-  alias Chess.{Board, Pieces.Pawn}
+  alias Chess.{Board, Pieces.Pawn, Pieces.Rook}
 
   @enforce_keys [:board, :players, :state]
   defstruct [:board, :players, :state]
@@ -44,6 +44,7 @@ defmodule Chess.Game do
     legal_move =
       case piece.type do
         :pawn -> Pawn.legal_move?(game.board, piece.color, from, to)
+        :rook -> Rook.legal_move?(game.board, piece.color, from, to)
         _ -> false
       end
 
