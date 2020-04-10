@@ -10,18 +10,12 @@ defmodule Chess.Application do
     children = [
       ChessWeb.Endpoint,
       {Registry, [name: Chess.Registry.GameSession, keys: :unique]},
-      {DynamicSupervisor, [name: Chess.Supervisor.GameSession, strategy: :one_for_one]},
-      {Chess.MatchmakingQueue, [name: Chess.MatchmakingQueue]},
+      {Chess.GameMaster, [name: Chess.GameMaster]},
       %{
-        id: Chess.GameFactory,
+        id: Chess.MatchmakingQueue,
         start:
-          {Chess.GameFactory, :start_link, [Chess.MatchmakingQueue, [name: Chess.GameFactory]]}
-      },
-      %{
-        id: ChessWeb.MatchmakingChannel.MatchBroadcaster,
-        start:
-          {ChessWeb.MatchmakingChannel.MatchBroadcaster, :start_link,
-           [Chess.GameFactory, [name: ChessWeb.MatchmakingChannel.MatchBroadcaster]]}
+          {Chess.MatchmakingQueue, :start_link,
+           [Chess.GameMaster, [name: Chess.MatchmakingQueue]]}
       }
     ]
 

@@ -1,10 +1,18 @@
 defmodule ChessWeb.MatchmakingChannel do
   use ChessWeb, :channel
 
-  def join("matchmaking:" <> username, _payload, socket) do
-    Chess.MatchmakingQueue.join(username)
+  def join("matchmaking:" <> _username, _payload, socket) do
+    send(self(), :after_join)
 
     {:ok, socket}
+  end
+
+  def handle_info(:after_join, socket) do
+    Chess.MatchmakingQueue.join(username_from_topic(socket.topic), fn game_name ->
+      broadcast!(socket, "matched", %{name: game_name})
+    end)
+
+    {:noreply, socket}
   end
 
   def terminate(_reason, socket) do
@@ -16,26 +24,4 @@ defmodule ChessWeb.MatchmakingChannel do
   end
 
   defp username_from_topic("matchmaking:" <> username), do: username
-
-  defmodule MatchBroadcaster do
-    use GenStage
-
-    def start_link(producer, options \\ []) do
-      GenStage.start_link(__MODULE__, producer, options)
-    end
-
-    def init(producer) do
-      {:consumer, :ok, subscribe_to: [producer]}
-    end
-
-    def handle_events(events, _from, state) do
-      for event <- events do
-        for player <- event.players do
-          ChessWeb.Endpoint.broadcast!("matchmaking:" <> player, "matched", event)
-        end
-      end
-
-      {:noreply, [], state}
-    end
-  end
 end
