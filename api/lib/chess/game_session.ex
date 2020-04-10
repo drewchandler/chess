@@ -19,13 +19,6 @@ defmodule Chess.GameSession do
     {:via, Registry, {Chess.Registry.GameSession, name}}
   end
 
-  def start_game(name, players) do
-    DynamicSupervisor.start_child(
-      Chess.Supervisor.GameSession,
-      {__MODULE__, {name, players}}
-    )
-  end
-
   def move(name, player, from, to) do
     GenServer.call(via(name), {:move, player, from, to})
   end

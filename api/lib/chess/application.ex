@@ -10,19 +10,7 @@ defmodule Chess.Application do
     children = [
       ChessWeb.Endpoint,
       {Registry, [name: Chess.Registry.GameSession, keys: :unique]},
-      {DynamicSupervisor, [name: Chess.Supervisor.GameSession, strategy: :one_for_one]},
-      {Chess.MatchmakingQueue, [name: Chess.MatchmakingQueue]},
-      %{
-        id: Chess.GameFactory,
-        start:
-          {Chess.GameFactory, :start_link, [Chess.MatchmakingQueue, [name: Chess.GameFactory]]}
-      },
-      %{
-        id: ChessWeb.MatchmakingChannel.MatchBroadcaster,
-        start:
-          {ChessWeb.MatchmakingChannel.MatchBroadcaster, :start_link,
-           [Chess.GameFactory, [name: ChessWeb.MatchmakingChannel.MatchBroadcaster]]}
-      }
+      Chess.GameMaster
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
