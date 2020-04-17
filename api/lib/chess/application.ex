@@ -10,7 +10,13 @@ defmodule Chess.Application do
     children = [
       ChessWeb.Endpoint,
       {Registry, [name: Chess.Registry.GameSession, keys: :unique]},
-      Chess.GameMaster
+      {Chess.GameMaster, [name: Chess.GameMaster]},
+      %{
+        id: Chess.MatchmakingQueue,
+        start:
+          {Chess.MatchmakingQueue, :start_link,
+           [Chess.GameMaster, [name: Chess.MatchmakingQueue]]}
+      }
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
