@@ -3,57 +3,49 @@ defmodule Chess.MatchmakingQueueTest do
 
   use ExUnit.Case
 
-  defmodule TestConsumer do
-    def start_link(producer) do
-      GenStage.start_link(__MODULE__, {producer, self()})
-    end
-
-    def init({producer, owner}) do
-      {:consumer, owner, subscribe_to: [producer]}
-    end
-
-    def handle_events(events, _from, owner) do
-      send(owner, {:received, events})
-      {:noreply, [], owner}
+  defmodule TestGameMaster do
+    def start_game(players) do
+      Enum.join(players, ",")
     end
   end
 
-  test "joining an empty queue does not start a match" do
-    {:ok, queue} = MatchmakingQueue.start_link()
-    {:ok, _} = TestConsumer.start_link(queue)
+  setup do
+    me = self()
+    join_callback = fn game_name -> send(me, {:received, game_name}) end
+    {:ok, queue} = MatchmakingQueue.start_link(TestGameMaster)
 
-    MatchmakingQueue.join(queue, "player")
+    [join_callback: join_callback, queue: queue]
+  end
 
+  test "joining an empty queue does not start a match", context do
+    join_result = MatchmakingQueue.join(context[:queue], "player", context[:join_callback])
+
+    assert join_result == :ok
     refute_receive {:received, _}
   end
 
-  test "joining queue with another player in it pairs you with the other player" do
-    {:ok, queue} = MatchmakingQueue.start_link()
-    {:ok, _} = TestConsumer.start_link(queue)
+  test "joining queue with another player in it pairs you with the other player", context do
+    MatchmakingQueue.join(context[:queue], "player1", context[:join_callback])
 
-    MatchmakingQueue.join(queue, "player1")
-    MatchmakingQueue.join(queue, "player2")
+    join_result = MatchmakingQueue.join(context[:queue], "player2", context[:join_callback])
 
-    assert_receive {:received, [["player1", "player2"]]}
+    assert join_result == :ok
+    assert_receive {:received, "player2,player1"}
+    assert_receive {:received, "player2,player1"}
   end
 
-  test "joining twice doesn't start a match" do
-    {:ok, queue} = MatchmakingQueue.start_link()
-    {:ok, _} = TestConsumer.start_link(queue)
+  test "joining twice is an error", context do
+    MatchmakingQueue.join(context[:queue], "player", context[:join_callback])
 
-    MatchmakingQueue.join(queue, "player")
-    MatchmakingQueue.join(queue, "player")
+    join_result = MatchmakingQueue.join(context[:queue], "player", context[:join_callback])
 
-    refute_receive {:received, _}
+    assert join_result == {:error, "Already in the queue"}
   end
 
-  test "leaving the queue" do
-    {:ok, queue} = MatchmakingQueue.start_link()
-    {:ok, _} = TestConsumer.start_link(queue)
-
-    MatchmakingQueue.join(queue, "player1")
-    MatchmakingQueue.leave(queue, "player1")
-    MatchmakingQueue.join(queue, "player2")
+  test "leaving the queue", context do
+    MatchmakingQueue.join(context[:queue], "player1", context[:join_callback])
+    MatchmakingQueue.leave(context[:queue], "player1")
+    MatchmakingQueue.join(context[:queue], "player2", context[:join_callback])
 
     refute_receive {:received, _}
   end
