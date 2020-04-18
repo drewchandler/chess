@@ -1,10 +1,6 @@
 defmodule Chess.Pieces.Bishop do
   alias Chess.{Board, Piece, Position}
 
-  def legal_move?(board, color, from, to) do
-    Enum.member?(moves(board, color, from), to)
-  end
-
   def moves(board, color, position) do
     moves_in_direction(board, color, position, {-1, -1}, []) ++
       moves_in_direction(board, color, position, {-1, 1}, []) ++

@@ -41,19 +41,26 @@ defmodule Chess.Game do
   defp validate_piece_belongs_to_color(_, _), do: {:error, "That piece does not belong to you."}
 
   defp attempt_move(game, piece, from, to) do
-    legal_move =
-      case piece.type do
-        :pawn -> Pawn.legal_move?(game.board, piece.color, from, to)
-        :rook -> Rook.legal_move?(game.board, piece.color, from, to)
-        :bishop -> Bishop.legal_move?(game.board, piece.color, from, to)
-        :queen -> Queen.legal_move?(game.board, piece.color, from, to)
-        _ -> false
-      end
-
-    if legal_move do
+    if legal_move?(game, piece, from, to) do
       {:ok, Board.move(game.board, from, to)}
     else
       {:error, "Attempted move is not legal."}
+    end
+  end
+
+  defp legal_move?(game, piece, from, to) do
+    game
+    |> legal_moves(piece, from)
+    |> Enum.member?(to)
+  end
+
+  defp legal_moves(game, piece, position) do
+    case piece.type do
+      :pawn -> Pawn.moves(game.board, piece.color, position)
+      :rook -> Rook.moves(game.board, piece.color, position)
+      :bishop -> Bishop.moves(game.board, piece.color, position)
+      :queen -> Queen.moves(game.board, piece.color, position)
+      _ -> []
     end
   end
 

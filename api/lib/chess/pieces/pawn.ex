@@ -1,10 +1,6 @@
 defmodule Chess.Pieces.Pawn do
   alias Chess.{Board, Position}
 
-  def legal_move?(board, color, from, to) do
-    Enum.member?(moves(board, color, from), to)
-  end
-
   def moves(board, color, position) do
     non_attacking_moves(board, color, position) ++ attacking_moves(board, color, position)
   end
