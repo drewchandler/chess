@@ -13,8 +13,8 @@ const Players: FunctionComponent<Props> = ({ game, playerColor }) => {
 
   return (
     <div>
-      {players.map(player => (
-        <div>
+      {players.map((player) => (
+        <div key={player}>
           {player === activePlayer && "*"}
           {player}
         </div>
