@@ -11,32 +11,29 @@ export default (
   const [error, setError] = useState<any | undefined>();
 
   useEffect(() => {
-    if (!socket) {
-      setChannel(undefined);
-      setError(undefined);
-
+    if (!socket || error) {
       return;
     }
 
     const c = socket.channel(name);
 
     c.join()
-      .receive("ok", payload => {
+      .receive("ok", (payload) => {
         setChannel(c);
         setError(undefined);
         if (onJoin) {
           onJoin(payload);
         }
       })
-      .receive("error", payload => {
+      .receive("error", (payload) => {
         setChannel(undefined);
-        setError(payload);
+        setError(payload.message);
       });
 
     return () => {
       c.leave();
     };
-  }, [socket, name, onJoin]);
+  }, [error, name, onJoin, socket]);
 
   return { error, channel };
 };

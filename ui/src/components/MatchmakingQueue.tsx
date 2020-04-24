@@ -11,13 +11,13 @@ interface Props {
 
 const MatchmakingQueue: FunctionComponent<Props> = ({ user, leaveQueue }) => {
   const history = useHistory();
-  const { channel } = useChannel(`matchmaking:${user.username}`);
+  const { error, channel } = useChannel(`matchmaking:${user.username}`);
   useEffect(() => {
     if (!channel) {
       return;
     }
 
-    const ref = channel.on("matched", data => {
+    const ref = channel.on("matched", (data) => {
       history.push(`/game/${data.name}`);
     });
 
@@ -28,7 +28,11 @@ const MatchmakingQueue: FunctionComponent<Props> = ({ user, leaveQueue }) => {
 
   return (
     <div className="w-1/4 border border-gray-700 bg-white p-4 rounded shadow flex flex-col items-center justify-center">
-      <LoadingSpinner />
+      {error ? (
+        <span className="text-lg text-red-500 py-4">{error}</span>
+      ) : (
+        <LoadingSpinner />
+      )}
       <button
         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
         onClick={leaveQueue}
