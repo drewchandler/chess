@@ -1,5 +1,6 @@
 defmodule Chess.Pieces.RookTest do
   use ExUnit.Case
+  use MoveHelpers
 
   alias Chess.{Piece, Pieces.Rook, Position}
 
@@ -73,9 +74,5 @@ defmodule Chess.Pieces.RookTest do
              Position.new(4, 5),
              Position.new(5, 5)
            ]
-  end
-
-  defp sort_moves(moves) do
-    moves |> Enum.sort(fn a, b -> a.x < b.x || (a.x == b.x && a.y <= b.y) end)
   end
 end

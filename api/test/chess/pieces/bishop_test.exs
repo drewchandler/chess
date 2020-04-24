@@ -1,5 +1,6 @@
 defmodule Chess.Pieces.BishopTest do
   use ExUnit.Case
+  use MoveHelpers
 
   alias Chess.{Piece, Pieces.Bishop, Position}
 
@@ -68,9 +69,5 @@ defmodule Chess.Pieces.BishopTest do
              Position.new(5, 3),
              Position.new(5, 7)
            ]
-  end
-
-  defp sort_moves(moves) do
-    moves |> Enum.sort(fn a, b -> a.x < b.x || (a.x == b.x && a.y <= b.y) end)
   end
 end
