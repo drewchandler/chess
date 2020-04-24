@@ -1,5 +1,14 @@
 defmodule Chess.Game do
-  alias Chess.{Board, Pieces.Bishop, Pieces.King, Pieces.Knight, Pieces.Pawn, Pieces.Queen, Pieces.Rook}
+  alias Chess.{
+    Board,
+    Piece,
+    Pieces.Bishop,
+    Pieces.King,
+    Pieces.Knight,
+    Pieces.Pawn,
+    Pieces.Queen,
+    Pieces.Rook
+  }
 
   @enforce_keys [:board, :players, :state]
   defstruct [:board, :players, :state]
@@ -16,8 +25,22 @@ defmodule Chess.Game do
          :ok <- validate_color_is_active(game, color),
          {:ok, piece} <- piece_at(game, from),
          :ok <- validate_piece_belongs_to_color(piece, color),
-         {:ok, new_board} <- attempt_move(game, piece, from, to) do
+         {:ok, new_board} <- attempt_move(game, from, to) do
       {:ok, %{game | board: new_board, state: next_turn(game)}}
+    end
+  end
+
+  def legal_moves(game, position) do
+    piece = piece_at(game, position)
+
+    case piece do
+      {:ok, %Piece{type: :bishop, color: color}} -> Bishop.moves(game.board, color, position)
+      {:ok, %Piece{type: :king, color: color}} -> King.moves(game.board, color, position)
+      {:ok, %Piece{type: :knight, color: color}} -> Knight.moves(game.board, color, position)
+      {:ok, %Piece{type: :pawn, color: color}} -> Pawn.moves(game.board, color, position)
+      {:ok, %Piece{type: :queen, color: color}} -> Queen.moves(game.board, color, position)
+      {:ok, %Piece{type: :rook, color: color}} -> Rook.moves(game.board, color, position)
+      _ -> []
     end
   end
 
@@ -40,29 +63,18 @@ defmodule Chess.Game do
   defp validate_piece_belongs_to_color(%{color: :black}, :black), do: :ok
   defp validate_piece_belongs_to_color(_, _), do: {:error, "That piece does not belong to you."}
 
-  defp attempt_move(game, piece, from, to) do
-    if legal_move?(game, piece, from, to) do
+  defp attempt_move(game, from, to) do
+    if legal_move?(game, from, to) do
       {:ok, Board.move(game.board, from, to)}
     else
       {:error, "Attempted move is not legal."}
     end
   end
 
-  defp legal_move?(game, piece, from, to) do
+  defp legal_move?(game, from, to) do
     game
-    |> legal_moves(piece, from)
+    |> legal_moves(from)
     |> Enum.member?(to)
-  end
-
-  defp legal_moves(game, piece, position) do
-    case piece.type do
-      :bishop -> Bishop.moves(game.board, piece.color, position)
-      :king -> King.moves(game.board, piece.color, position)
-      :knight -> Knight.moves(game.board, piece.color, position)
-      :pawn -> Pawn.moves(game.board, piece.color, position)
-      :queen -> Queen.moves(game.board, piece.color, position)
-      :rook -> Rook.moves(game.board, piece.color, position)
-    end
   end
 
   defp next_turn(%{state: :white_turn}), do: :black_turn

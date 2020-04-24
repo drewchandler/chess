@@ -3,29 +3,37 @@ import { Game } from "../models/Game";
 import useChannel from "./use-channel";
 
 interface GameDispatch {
-  move(from: number, to: number): void;
+  makeMove(from: number, to: number): void;
+  legalMoves(position: number): Promise<number[]>;
 }
 
 export default (
   name: string
 ): { game?: Game; error?: any; dispatch: GameDispatch } => {
   const [game, setGame] = useState<Game | undefined>();
-  const onJoin = useCallback(payload => setGame(payload.game), [setGame]);
+  const onJoin = useCallback((payload) => setGame(payload.game), [setGame]);
   const { error, channel } = useChannel(`game:${name}`, onJoin);
   useEffect(() => {
     if (!channel) {
       return;
     }
 
-    channel.on("update", payload => {
+    channel.on("update", (payload) => {
       setGame(payload.game);
     });
   }, [channel]);
 
   const dispatch = {
-    move(from: number, to: number): void {
+    makeMove(from: number, to: number) {
       channel?.push("move", { from, to });
-    }
+    },
+    legalMoves(position: number): Promise<number[]> {
+      return new Promise((resolve, reject) => {
+          channel?.push("legal_moves", { position })
+            .receive("ok", ({ moves }) => resolve(moves))
+            .receive("error", reject);
+      });
+    },
   };
 
   return { game, error, dispatch };

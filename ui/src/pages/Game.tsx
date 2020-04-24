@@ -23,7 +23,8 @@ const GamePage: FunctionComponent = () => {
         <Board
           board={game.board}
           playerColor={playerColor}
-          move={dispatch.move}
+          makeMove={dispatch.makeMove}
+          legalMoves={dispatch.legalMoves}
         />
       </div>
       <div className="flex flex-col flex-shrink-0 w-1/4 justify-center">

@@ -28,7 +28,7 @@ defmodule ChessWeb.MatchmakingChannel do
     :ok
   end
 
-  def terminate(_, socket) do
+  def terminate(_reason, _socket) do
     :ok
   end
 
