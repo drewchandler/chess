@@ -1,5 +1,6 @@
 import range from "lodash/range";
-import React, { FunctionComponent, useState, useEffect } from "react";
+import debounce from "lodash/debounce";
+import React, { FunctionComponent, useState, useRef, useCallback } from "react";
 import { Board as BoardType, Color } from "../models/Game";
 import Square from "./Square";
 
@@ -16,24 +17,34 @@ const Board: FunctionComponent<Props> = ({
   makeMove,
   legalMoves,
 }) => {
-  const [hoveredPosition, setHoveredPosition] = useState<number | undefined>();
+  const hoveredPosition = useRef<number | undefined>();
   const [moves, setMoves] = useState<number[]>([]);
-  useEffect(() => {
-    if (!hoveredPosition) return;
+  const requestLegalMoves = useCallback(
+    debounce(async (position: number) => {
+      const newMoves = await legalMoves(position);
 
-    let requestStillValid = true;
-    legalMoves(hoveredPosition).then((moves) => {
-      if (requestStillValid) setMoves(moves);
-    });
-
-    return () => {
-      requestStillValid = false;
-    };
-  }, [legalMoves, hoveredPosition, setMoves]);
+      if (hoveredPosition.current === position) {
+        setMoves(newMoves);
+      }
+    }, 300),
+    [legalMoves, setMoves]
+  );
 
   const onHover = (position: number) => {
+    hoveredPosition.current = position;
     setMoves([]);
-    setHoveredPosition(board[position] ? position : undefined);
+
+    if (board[position]) {
+      requestLegalMoves(position);
+    } else {
+      requestLegalMoves.cancel();
+    }
+  };
+
+  const mouseLeave = () => {
+    hoveredPosition.current = undefined;
+    setMoves([]);
+    requestLegalMoves.cancel();
   };
 
   let rows = range(0, 8);
@@ -45,7 +56,10 @@ const Board: FunctionComponent<Props> = ({
   }
 
   return (
-    <div className="bg-white border border-gray-700 rounded shadow w-3/4-vmin h-3/4-vmin m-8 flex flex-wrap">
+    <div
+      className="bg-white border border-gray-700 rounded shadow w-3/4-vmin h-3/4-vmin m-8 flex flex-wrap"
+      onMouseLeave={mouseLeave}
+    >
       {rows.map((y) =>
         cols.flatMap((x) => {
           const index = y * 8 + x;
