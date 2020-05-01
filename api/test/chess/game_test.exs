@@ -45,12 +45,39 @@ defmodule Chess.GameTest do
     to = Position.new(0, 6)
 
     board = %{
-      from => Piece.new(:pawn, :white)
+      from => Piece.new(:pawn, :white),
+      Position.new(4, 0) => Piece.new(:king, :white),
+      Position.new(4, 7) => Piece.new(:king, :black)
     }
 
     game = build_game(board: board)
 
     assert Game.move(game, "white", from, to) ==
-             {:ok, %{game | state: :black_turn, board: %{to => Piece.new(:pawn, :white)}}}
+             {:ok,
+              %{
+                game
+                | state: :black_turn,
+                  board: %{
+                    to => Piece.new(:pawn, :white),
+                    Position.new(4, 0) => Piece.new(:king, :white),
+                    Position.new(4, 7) => Piece.new(:king, :black)
+                  }
+              }}
+  end
+
+  test "can't move into check" do
+    from = Position.new(4, 1)
+    to = Position.new(0, 1)
+
+    board = %{
+      from => Piece.new(:rook, :white),
+      Position.new(4, 0) => Piece.new(:king, :white),
+      Position.new(4, 2) => Piece.new(:rook, :black),
+      Position.new(4, 7) => Piece.new(:king, :black)
+    }
+
+    game = build_game(board: board)
+
+    assert Game.move(game, "white", from, to) == {:error, "Attempted move is not legal."}
   end
 end

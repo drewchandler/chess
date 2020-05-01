@@ -1,14 +1,5 @@
 defmodule Chess.Game do
-  alias Chess.{
-    Board,
-    Piece,
-    Pieces.Bishop,
-    Pieces.King,
-    Pieces.Knight,
-    Pieces.Pawn,
-    Pieces.Queen,
-    Pieces.Rook
-  }
+  alias Chess.Board
 
   @enforce_keys [:board, :players, :state]
   defstruct [:board, :players, :state]
@@ -30,19 +21,7 @@ defmodule Chess.Game do
     end
   end
 
-  def legal_moves(game, position) do
-    piece = piece_at(game, position)
-
-    case piece do
-      {:ok, %Piece{type: :bishop, color: color}} -> Bishop.moves(game.board, color, position)
-      {:ok, %Piece{type: :king, color: color}} -> King.moves(game.board, color, position)
-      {:ok, %Piece{type: :knight, color: color}} -> Knight.moves(game.board, color, position)
-      {:ok, %Piece{type: :pawn, color: color}} -> Pawn.moves(game.board, color, position)
-      {:ok, %Piece{type: :queen, color: color}} -> Queen.moves(game.board, color, position)
-      {:ok, %Piece{type: :rook, color: color}} -> Rook.moves(game.board, color, position)
-      _ -> []
-    end
-  end
+  def legal_moves(game, position), do: Board.legal_moves(game.board, position)
 
   defp color_for_player(%{players: [player, _]}, player), do: {:ok, :white}
   defp color_for_player(%{players: [_, player]}, player), do: {:ok, :black}
@@ -72,8 +51,8 @@ defmodule Chess.Game do
   end
 
   defp legal_move?(game, from, to) do
-    game
-    |> legal_moves(from)
+    game.board
+    |> Board.legal_moves(from)
     |> Enum.member?(to)
   end
 
