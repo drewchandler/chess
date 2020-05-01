@@ -1,8 +1,8 @@
 import range from "lodash/range";
-import debounce from "lodash/debounce";
-import React, { FunctionComponent, useState, useRef, useCallback } from "react";
+import React, { FunctionComponent, useState, useRef } from "react";
 import { Board as BoardType, Color } from "../models/Game";
 import Square from "./Square";
+import useDebounce from "../hooks/use-debounce";
 
 interface Props {
   board: BoardType;
@@ -19,14 +19,15 @@ const Board: FunctionComponent<Props> = ({
 }) => {
   const hoveredPosition = useRef<number | undefined>();
   const [moves, setMoves] = useState<number[]>([]);
-  const requestLegalMoves = useCallback(
-    debounce(async (position: number) => {
+  const requestLegalMoves = useDebounce(
+    async (position: number) => {
       const newMoves = await legalMoves(position);
 
       if (hoveredPosition.current === position) {
         setMoves(newMoves);
       }
-    }, 300),
+    },
+    300,
     [legalMoves, setMoves]
   );
 
