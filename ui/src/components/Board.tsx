@@ -1,5 +1,5 @@
 import range from "lodash/range";
-import React, { FunctionComponent, useState, useRef } from "react";
+import React, { FunctionComponent, useState, useRef, useEffect } from "react";
 import { Board as BoardType, Color } from "../models/Game";
 import Square from "./Square";
 import useDebounce from "../hooks/use-debounce";
@@ -30,6 +30,7 @@ const Board: FunctionComponent<Props> = ({
     300,
     [legalMoves, setMoves]
   );
+  useEffect(() => setMoves([]), [board]);
 
   const onHover = (position: number) => {
     hoveredPosition.current = position;
