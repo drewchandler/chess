@@ -48,6 +48,26 @@ const Board: FunctionComponent<Props> = ({
     requestLegalMoves.cancel();
   };
 
+  return (
+    <div
+      className="bg-white border border-gray-700 rounded shadow w-3/4-vmin h-3/4-vmin m-8 flex flex-wrap"
+      onMouseLeave={mouseLeave}
+    >
+      {squares(playerColor).map((index) => (
+        <Square
+          key={index}
+          index={index}
+          piece={board[index]}
+          isHighlighted={moves.includes(index)}
+          onDrop={makeMove}
+          onHover={onHover}
+        />
+      ))}
+    </div>
+  );
+};
+
+const squares = (playerColor: Color): Array<number> => {
   let rows = range(0, 8);
   let cols = range(0, 8);
   if (playerColor === Color.White) {
@@ -56,29 +76,7 @@ const Board: FunctionComponent<Props> = ({
     cols = cols.reverse();
   }
 
-  return (
-    <div
-      className="bg-white border border-gray-700 rounded shadow w-3/4-vmin h-3/4-vmin m-8 flex flex-wrap"
-      onMouseLeave={mouseLeave}
-    >
-      {rows.map((y) =>
-        cols.flatMap((x) => {
-          const index = y * 8 + x;
-
-          return (
-            <Square
-              key={index}
-              index={index}
-              piece={board[index]}
-              isHighlighted={moves.includes(index)}
-              onDrop={makeMove}
-              onHover={onHover}
-            />
-          );
-        })
-      )}
-    </div>
-  );
+  return rows.flatMap((y) => cols.map((x) => y * 8 + x));
 };
 
 export default Board;
