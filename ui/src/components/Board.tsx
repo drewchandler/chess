@@ -36,7 +36,7 @@ const Board: FunctionComponent<Props> = ({
     hoveredPosition.current = position;
     setMoves([]);
 
-    if (board[position]) {
+    if (board[position]?.color === playerColor) {
       requestLegalMoves(position);
     } else {
       requestLegalMoves.cancel();
