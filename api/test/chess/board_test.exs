@@ -2,90 +2,98 @@ defmodule Chess.BoardTest do
   alias Chess.{Board, Piece, Position}
   use ExUnit.Case
 
-  test "you can move pieces into empty squares" do
-    board = %{
-      Position.new(0, 2) => Piece.new(:rook, :white),
-      Position.new(0, 5) => Piece.new(:pawn, :black),
-      Position.new(4, 0) => Piece.new(:king, :white),
-      Position.new(4, 7) => Piece.new(:king, :black)
-    }
+  describe "move/3" do
+    test "you can move pieces into empty squares" do
+      board = %{
+        Position.new(0, 2) => Piece.new(:rook, :white),
+        Position.new(0, 5) => Piece.new(:pawn, :black),
+        Position.new(4, 0) => Piece.new(:king, :white),
+        Position.new(4, 7) => Piece.new(:king, :black)
+      }
 
-    {:ok, new_board} = Board.move(board, Position.new(0, 2), Position.new(0, 4))
+      {:ok, new_board} = Board.move(board, Position.new(0, 2), Position.new(0, 4))
 
-    assert new_board == %{
-             Position.new(0, 4) => Piece.new(:rook, :white),
-             Position.new(0, 5) => Piece.new(:pawn, :black),
-             Position.new(4, 0) => Piece.new(:king, :white),
-             Position.new(4, 7) => Piece.new(:king, :black)
-           }
+      assert new_board == %{
+               Position.new(0, 4) => Piece.new(:rook, :white),
+               Position.new(0, 5) => Piece.new(:pawn, :black),
+               Position.new(4, 0) => Piece.new(:king, :white),
+               Position.new(4, 7) => Piece.new(:king, :black)
+             }
+    end
+
+    test "you can move pieces into occupied squares" do
+      board = %{
+        Position.new(0, 2) => Piece.new(:rook, :white),
+        Position.new(0, 5) => Piece.new(:pawn, :black),
+        Position.new(4, 0) => Piece.new(:king, :white),
+        Position.new(4, 7) => Piece.new(:king, :black)
+      }
+
+      {:ok, new_board} = Board.move(board, Position.new(0, 2), Position.new(0, 5))
+
+      assert new_board == %{
+               Position.new(0, 5) => Piece.new(:rook, :white),
+               Position.new(4, 0) => Piece.new(:king, :white),
+               Position.new(4, 7) => Piece.new(:king, :black)
+             }
+    end
+
+    test "can't move into check" do
+      from = Position.new(4, 1)
+      to = Position.new(0, 1)
+
+      board = %{
+        from => Piece.new(:rook, :white),
+        Position.new(4, 0) => Piece.new(:king, :white),
+        Position.new(4, 2) => Piece.new(:rook, :black),
+        Position.new(4, 7) => Piece.new(:king, :black)
+      }
+
+      assert Board.move(board, from, to) == {:error, "Attempted move is not legal."}
+    end
   end
 
-  test "you can move pieces into occupied squares" do
-    board = %{
-      Position.new(0, 2) => Piece.new(:rook, :white),
-      Position.new(0, 5) => Piece.new(:pawn, :black),
-      Position.new(4, 0) => Piece.new(:king, :white),
-      Position.new(4, 7) => Piece.new(:king, :black)
-    }
+  describe "piece_at/2" do
+    test "you can ask for the piece at a given position" do
+      board = %{
+        Position.new(0, 2) => Piece.new(:rook, :white),
+        Position.new(0, 5) => Piece.new(:pawn, :black),
+        Position.new(4, 0) => Piece.new(:king, :white),
+        Position.new(4, 7) => Piece.new(:king, :black)
+      }
 
-    {:ok, new_board} = Board.move(board, Position.new(0, 2), Position.new(0, 5))
+      result = Board.piece_at(board, Position.new(0, 5))
 
-    assert new_board == %{
-             Position.new(0, 5) => Piece.new(:rook, :white),
-             Position.new(4, 0) => Piece.new(:king, :white),
-             Position.new(4, 7) => Piece.new(:king, :black)
-           }
+      assert result == Piece.new(:pawn, :black)
+    end
   end
 
-  test "can't move into check" do
-    from = Position.new(4, 1)
-    to = Position.new(0, 1)
+  describe "occupied?/2" do
+    test "you can ask if a position is occupied" do
+      board = %{
+        Position.new(0, 2) => Piece.new(:rook, :white),
+        Position.new(0, 5) => Piece.new(:pawn, :black),
+        Position.new(4, 0) => Piece.new(:king, :white),
+        Position.new(4, 7) => Piece.new(:king, :black)
+      }
 
-    board = %{
-      from => Piece.new(:rook, :white),
-      Position.new(4, 0) => Piece.new(:king, :white),
-      Position.new(4, 2) => Piece.new(:rook, :black),
-      Position.new(4, 7) => Piece.new(:king, :black)
-    }
-
-    assert Board.move(board, from, to) == {:error, "Attempted move is not legal."}
+      assert Board.occupied?(board, Position.new(0, 2))
+      refute Board.occupied?(board, Position.new(5, 2))
+    end
   end
 
-  test "you can ask for the piece at a given position" do
-    board = %{
-      Position.new(0, 2) => Piece.new(:rook, :white),
-      Position.new(0, 5) => Piece.new(:pawn, :black),
-      Position.new(4, 0) => Piece.new(:king, :white),
-      Position.new(4, 7) => Piece.new(:king, :black)
-    }
+  describe "occupied_by_color?/3" do
+    test "you can ask if a position is occupied by a color" do
+      board = %{
+        Position.new(0, 2) => Piece.new(:rook, :white),
+        Position.new(0, 5) => Piece.new(:pawn, :black),
+        Position.new(4, 0) => Piece.new(:king, :white),
+        Position.new(4, 7) => Piece.new(:king, :black)
+      }
 
-    result = Board.piece_at(board, Position.new(0, 5))
-
-    assert result == Piece.new(:pawn, :black)
-  end
-
-  test "you can ask if a position is occupied" do
-    board = %{
-      Position.new(0, 2) => Piece.new(:rook, :white),
-      Position.new(0, 5) => Piece.new(:pawn, :black),
-      Position.new(4, 0) => Piece.new(:king, :white),
-      Position.new(4, 7) => Piece.new(:king, :black)
-    }
-
-    assert Board.occupied?(board, Position.new(0, 2))
-    refute Board.occupied?(board, Position.new(5, 2))
-  end
-
-  test "you can ask if a position is occupied by a color" do
-    board = %{
-      Position.new(0, 2) => Piece.new(:rook, :white),
-      Position.new(0, 5) => Piece.new(:pawn, :black),
-      Position.new(4, 0) => Piece.new(:king, :white),
-      Position.new(4, 7) => Piece.new(:king, :black)
-    }
-
-    assert Board.occupied_by_color?(board, Position.new(0, 2), :white)
-    refute Board.occupied_by_color?(board, Position.new(0, 2), :black)
-    refute Board.occupied_by_color?(board, Position.new(5, 2), :white)
+      assert Board.occupied_by_color?(board, Position.new(0, 2), :white)
+      refute Board.occupied_by_color?(board, Position.new(0, 2), :black)
+      refute Board.occupied_by_color?(board, Position.new(5, 2), :white)
+    end
   end
 end

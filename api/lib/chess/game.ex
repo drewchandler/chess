@@ -1,5 +1,5 @@
 defmodule Chess.Game do
-  alias Chess.Board
+  alias Chess.{Board, CheckDetection}
 
   @enforce_keys [:board, :players, :state]
   defstruct [:board, :players, :state]
@@ -17,7 +17,11 @@ defmodule Chess.Game do
          {:ok, piece} <- piece_at(game, from),
          :ok <- validate_piece_belongs_to_color(piece, color),
          {:ok, new_board} <- Board.move(game.board, from, to) do
-      {:ok, %{game | board: new_board, state: next_turn(game)}}
+      opponent_mated =
+        new_board
+        |> CheckDetection.mate?(enemy_color(color))
+
+      {:ok, %{game | board: new_board, state: next_state(game, opponent_mated)}}
     end
   end
 
@@ -42,7 +46,12 @@ defmodule Chess.Game do
   defp validate_piece_belongs_to_color(%{color: :black}, :black), do: :ok
   defp validate_piece_belongs_to_color(_, _), do: {:error, "That piece does not belong to you."}
 
-  defp next_turn(%{state: :white_turn}), do: :black_turn
-  defp next_turn(%{state: :black_turn}), do: :white_turn
-  defp next_turn(%{state: state}), do: state
+  defp next_state(%{state: :white_turn}, true), do: :white_victory
+  defp next_state(%{state: :black_turn}, true), do: :black_victory
+  defp next_state(%{state: :white_turn}, false), do: :black_turn
+  defp next_state(%{state: :black_turn}, false), do: :white_turn
+  defp next_state(%{state: state}, _), do: state
+
+  defp enemy_color(:black), do: :white
+  defp enemy_color(:white), do: :black
 end

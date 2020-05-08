@@ -4,12 +4,12 @@ export enum PieceType {
   Knight = "knight",
   Bishop = "bishop",
   Queen = "queen",
-  King = "king"
+  King = "king",
 }
 
 export enum Color {
   White = "white",
-  Black = "black"
+  Black = "black",
 }
 
 export interface Piece {
@@ -19,7 +19,9 @@ export interface Piece {
 
 export enum State {
   WhiteTurn = "white_turn",
-  BlackTurn = "black_turn"
+  BlackTurn = "black_turn",
+  WhiteVictory = "white_victory",
+  BlackVictory = "black_victory",
 }
 
 export type Board = Array<Piece | undefined>;
