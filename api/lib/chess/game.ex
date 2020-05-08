@@ -16,7 +16,7 @@ defmodule Chess.Game do
          :ok <- validate_color_is_active(game, color),
          {:ok, piece} <- piece_at(game, from),
          :ok <- validate_piece_belongs_to_color(piece, color),
-         {:ok, new_board} <- attempt_move(game, from, to) do
+         {:ok, new_board} <- Board.move(game.board, from, to) do
       {:ok, %{game | board: new_board, state: next_turn(game)}}
     end
   end
@@ -41,20 +41,6 @@ defmodule Chess.Game do
   defp validate_piece_belongs_to_color(%{color: :white}, :white), do: :ok
   defp validate_piece_belongs_to_color(%{color: :black}, :black), do: :ok
   defp validate_piece_belongs_to_color(_, _), do: {:error, "That piece does not belong to you."}
-
-  defp attempt_move(game, from, to) do
-    if legal_move?(game, from, to) do
-      {:ok, Board.move(game.board, from, to)}
-    else
-      {:error, "Attempted move is not legal."}
-    end
-  end
-
-  defp legal_move?(game, from, to) do
-    game.board
-    |> Board.legal_moves(from)
-    |> Enum.member?(to)
-  end
 
   defp next_turn(%{state: :white_turn}), do: :black_turn
   defp next_turn(%{state: :black_turn}), do: :white_turn

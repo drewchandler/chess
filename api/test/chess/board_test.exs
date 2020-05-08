@@ -10,7 +10,7 @@ defmodule Chess.BoardTest do
       Position.new(4, 7) => Piece.new(:king, :black)
     }
 
-    new_board = Board.move(board, Position.new(0, 2), Position.new(0, 4))
+    {:ok, new_board} = Board.move(board, Position.new(0, 2), Position.new(0, 4))
 
     assert new_board == %{
              Position.new(0, 4) => Piece.new(:rook, :white),
@@ -28,13 +28,27 @@ defmodule Chess.BoardTest do
       Position.new(4, 7) => Piece.new(:king, :black)
     }
 
-    new_board = Board.move(board, Position.new(0, 2), Position.new(0, 5))
+    {:ok, new_board} = Board.move(board, Position.new(0, 2), Position.new(0, 5))
 
     assert new_board == %{
              Position.new(0, 5) => Piece.new(:rook, :white),
              Position.new(4, 0) => Piece.new(:king, :white),
              Position.new(4, 7) => Piece.new(:king, :black)
            }
+  end
+
+  test "can't move into check" do
+    from = Position.new(4, 1)
+    to = Position.new(0, 1)
+
+    board = %{
+      from => Piece.new(:rook, :white),
+      Position.new(4, 0) => Piece.new(:king, :white),
+      Position.new(4, 2) => Piece.new(:rook, :black),
+      Position.new(4, 7) => Piece.new(:king, :black)
+    }
+
+    assert Board.move(board, from, to) == {:error, "Attempted move is not legal."}
   end
 
   test "you can ask for the piece at a given position" do

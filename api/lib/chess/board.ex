@@ -48,8 +48,17 @@ defmodule Chess.Board do
   def initial_board, do: @initial_board
 
   def move(board, from, to) do
-    {piece, board} = Map.pop(board, from)
-    Map.put(board, to, piece)
+    if legal_move?(board, from, to) do
+      {:ok, make_move(board, from, to)}
+    else
+      {:error, "Attempted move is not legal."}
+    end
+  end
+
+  defp legal_move?(board, from, to) do
+    board
+    |> legal_moves(from)
+    |> Enum.member?(to)
   end
 
   def piece_at(board, position), do: board[position]
@@ -71,6 +80,11 @@ defmodule Chess.Board do
     |> Enum.reject(&moves_self_into_check?(board, piece.color, position, &1))
   end
 
+  defp make_move(board, from, to) do
+    {piece, board} = Map.pop(board, from)
+    Map.put(board, to, piece)
+  end
+
   defp moves_for_piece(board, piece, position) do
     case piece do
       %Piece{type: :bishop, color: color} -> Bishop.moves(board, color, position)
@@ -85,7 +99,7 @@ defmodule Chess.Board do
 
   defp moves_self_into_check?(board, color, from, to) do
     board
-    |> move(from, to)
+    |> make_move(from, to)
     |> check?(color)
   end
 
