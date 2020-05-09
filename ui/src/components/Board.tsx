@@ -1,8 +1,8 @@
 import range from "lodash/range";
-import React, { FunctionComponent, useState, useRef, useEffect } from "react";
+import React, { FunctionComponent, useEffect, useRef, useState } from "react";
+import useDebounce from "../hooks/use-debounce";
 import { Board as BoardType, Color } from "../models/Game";
 import Square from "./Square";
-import useDebounce from "../hooks/use-debounce";
 
 interface Props {
   board: BoardType;
@@ -68,7 +68,7 @@ const Board: FunctionComponent<Props> = ({
   );
 };
 
-const squares = (playerColor: Color): Array<number> => {
+const squares = (playerColor: Color): number[] => {
   let rows = range(0, 8);
   let cols = range(0, 8);
   if (playerColor === Color.White) {
