@@ -4,8 +4,6 @@ interface Props {
   error: string;
 }
 
-const ErrorMessage: FunctionComponent<Props> = ({ error }) => (
+export const ErrorMessage: FunctionComponent<Props> = ({ error }) => (
   <span className="text-lg text-red-500 py-4">{error}</span>
 );
-
-export default ErrorMessage;

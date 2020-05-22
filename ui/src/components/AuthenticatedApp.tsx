@@ -1,10 +1,10 @@
 import React, { FunctionComponent } from "react";
 import { Route, Switch } from "react-router-dom";
-import GamePage from "../pages/Game";
-import LobbyPage from "../pages/Lobby";
-import AuthenticatedHeader from "./AuthenticatedHeader";
+import { GamePage } from "../pages/Game";
+import { LobbyPage } from "../pages/Lobby";
+import { AuthenticatedHeader } from "./AuthenticatedHeader";
 
-const AuthenticatedApp: FunctionComponent = () => {
+export const AuthenticatedApp: FunctionComponent = () => {
   return (
     <>
       <AuthenticatedHeader />
@@ -15,5 +15,3 @@ const AuthenticatedApp: FunctionComponent = () => {
     </>
   );
 };
-
-export default AuthenticatedApp;

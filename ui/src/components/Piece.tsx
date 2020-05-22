@@ -7,7 +7,7 @@ interface Props {
   className?: string;
 }
 
-const Piece: FunctionComponent<Props> = ({ piece, className }) => {
+export const Piece: FunctionComponent<Props> = ({ piece, className }) => {
   const spriteUrl = piece && `${sprite}#${piece.color}-${piece.type}`;
 
   return (
@@ -16,5 +16,3 @@ const Piece: FunctionComponent<Props> = ({ piece, className }) => {
     </svg>
   );
 };
-
-export default Piece;

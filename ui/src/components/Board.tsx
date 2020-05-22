@@ -1,8 +1,8 @@
 import range from "lodash/range";
 import React, { FunctionComponent, useEffect, useRef, useState } from "react";
-import useDebounce from "../hooks/use-debounce";
+import { useDebounce } from "../hooks/use-debounce";
 import { Board as BoardType, Color } from "../models/Game";
-import Square from "./Square";
+import { Square } from "./Square";
 
 interface Props {
   board: BoardType;
@@ -11,7 +11,7 @@ interface Props {
   legalMoves: (position: number) => Promise<number[]>;
 }
 
-const Board: FunctionComponent<Props> = ({
+export const Board: FunctionComponent<Props> = ({
   board,
   playerColor,
   makeMove,
@@ -79,5 +79,3 @@ const squares = (playerColor: Color): number[] => {
 
   return rows.flatMap((y) => cols.map((x) => y * 8 + x));
 };
-
-export default Board;

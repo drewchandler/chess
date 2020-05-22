@@ -1,17 +1,20 @@
 import React, { FunctionComponent, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { User } from "../hooks/use-auth";
-import useChannel from "../hooks/use-channel";
+import { useChannel } from "../hooks/use-channel";
 import { ReactComponent as LoadingSpinner } from "../svgs/loading.svg";
-import Modal from "./Modal";
-import ErrorMessage from "./ErrorMessage";
+import { Modal } from "./Modal";
+import { ErrorMessage } from "./ErrorMessage";
 
 interface Props {
   user: User;
   leaveQueue: () => void;
 }
 
-const MatchmakingQueue: FunctionComponent<Props> = ({ user, leaveQueue }) => {
+export const MatchmakingQueue: FunctionComponent<Props> = ({
+  user,
+  leaveQueue,
+}) => {
   const history = useHistory();
   const { error, channel } = useChannel(`matchmaking:${user.username}`);
   useEffect(() => {
@@ -38,5 +41,3 @@ const MatchmakingQueue: FunctionComponent<Props> = ({ user, leaveQueue }) => {
     </Modal>
   );
 };
-
-export default MatchmakingQueue;

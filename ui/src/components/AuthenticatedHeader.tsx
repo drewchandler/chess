@@ -1,9 +1,9 @@
 import React, { FunctionComponent } from "react";
-import useAuth from "../hooks/use-auth";
+import { useAuth } from "../hooks/use-auth";
 import { Color, PieceType } from "../models/Game";
-import Piece from "./Piece";
+import { Piece } from "./Piece";
 
-const AuthenticatedHeader: FunctionComponent = () => {
+export const AuthenticatedHeader: FunctionComponent = () => {
   const { user, logout } = useAuth();
 
   return (
@@ -27,5 +27,3 @@ const AuthenticatedHeader: FunctionComponent = () => {
     </div>
   );
 };
-
-export default AuthenticatedHeader;

@@ -3,7 +3,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 import { ProvideAuth } from "../hooks/use-auth";
 import { ProvideSocket } from "../hooks/use-socket";
 
-const AppProviders: FunctionComponent = ({ children }) => {
+export const AppProviders: FunctionComponent = ({ children }) => {
   return (
     <Router>
       <ProvideSocket>
@@ -12,5 +12,3 @@ const AppProviders: FunctionComponent = ({ children }) => {
     </Router>
   );
 };
-
-export default AppProviders;

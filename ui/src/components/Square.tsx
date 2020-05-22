@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from "react";
 import { Piece as PieceModel } from "../models/Game";
-import Piece from "./Piece";
+import { Piece } from "./Piece";
 
 interface Props {
   index: number;
@@ -10,7 +10,7 @@ interface Props {
   onHover: (position: number) => void;
 }
 
-const Square: FunctionComponent<Props> = ({
+export const Square: FunctionComponent<Props> = ({
   index,
   piece,
   isHighlighted,
@@ -46,5 +46,3 @@ const Square: FunctionComponent<Props> = ({
     </div>
   );
 };
-
-export default Square;

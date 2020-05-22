@@ -1,13 +1,13 @@
 import { useCallback, useEffect, useState } from "react";
 import { Game } from "../models/Game";
-import useChannel from "./use-channel";
+import { useChannel } from "./use-channel";
 
 interface GameDispatch {
   makeMove(from: number, to: number): void;
   legalMoves(position: number): Promise<number[]>;
 }
 
-export default (
+export const useGame = (
   name: string
 ): { game?: Game; error?: string; dispatch: GameDispatch } => {
   const [game, setGame] = useState<Game | undefined>();

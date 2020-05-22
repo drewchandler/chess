@@ -1,9 +1,9 @@
 import React, { FunctionComponent } from "react";
-import useAuth from "../hooks/use-auth";
-import AuthenticatedApp from "./AuthenticatedApp";
-import UnauthenticatedApp from "./UnauthenticatedApp";
+import { useAuth } from "../hooks/use-auth";
+import { AuthenticatedApp } from "./AuthenticatedApp";
+import { UnauthenticatedApp } from "./UnauthenticatedApp";
 
-const App: FunctionComponent = () => {
+export const App: FunctionComponent = () => {
   const { user } = useAuth();
 
   return (
@@ -12,5 +12,3 @@ const App: FunctionComponent = () => {
     </div>
   );
 };
-
-export default App;

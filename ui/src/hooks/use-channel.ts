@@ -1,8 +1,8 @@
 import { Channel } from "phoenix";
 import { useEffect, useState } from "react";
-import useSocket from "./use-socket";
+import { useSocket } from "./use-socket";
 
-export default (
+export const useChannel = (
   name: string,
   onJoin?: (payload: any) => void
 ): { channel: Channel | undefined; error?: string } => {

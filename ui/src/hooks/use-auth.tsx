@@ -3,10 +3,10 @@ import React, {
   FunctionComponent,
   useContext,
   useEffect,
-  useState
+  useState,
 } from "react";
 import { useHistory } from "react-router-dom";
-import useSocket from "./use-socket";
+import { useSocket } from "./use-socket";
 
 export interface User {
   username: string;
@@ -56,7 +56,7 @@ export const ProvideAuth: FunctionComponent = ({ children }) => {
   );
 };
 
-const useAuth = () => {
+export const useAuth = () => {
   const authContextValue = useContext(authContext);
 
   if (!authContextValue) {
@@ -65,5 +65,3 @@ const useAuth = () => {
 
   return authContextValue;
 };
-
-export default useAuth;

@@ -3,7 +3,7 @@ import React, {
   createContext,
   FunctionComponent,
   useContext,
-  useState
+  useState,
 } from "react";
 
 interface SocketContextValue {
@@ -43,7 +43,7 @@ export const ProvideSocket: FunctionComponent = ({ children }) => {
   );
 };
 
-const useSocket = () => {
+export const useSocket = () => {
   const socketContextValue = useContext(socketContext);
 
   if (!socketContextValue) {
@@ -52,5 +52,3 @@ const useSocket = () => {
 
   return socketContextValue;
 };
-
-export default useSocket;

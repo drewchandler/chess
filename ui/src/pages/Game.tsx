@@ -1,16 +1,16 @@
 import React, { FunctionComponent } from "react";
 import { useParams, useHistory } from "react-router-dom";
-import Board from "../components/Board";
-import GameOutcome from "../components/GameOutcome";
-import Players from "../components/Players";
-import useAuth from "../hooks/use-auth";
-import useGame from "../hooks/use-game";
+import { Board } from "../components/Board";
+import { GameOutcome } from "../components/GameOutcome";
+import { Players } from "../components/Players";
+import { useAuth } from "../hooks/use-auth";
+import { useGame } from "../hooks/use-game";
 import { getPlayerColor, State } from "../models/Game";
-import Modal from "../components/Modal";
-import ErrorMessage from "../components/ErrorMessage";
+import { Modal } from "../components/Modal";
+import { ErrorMessage } from "../components/ErrorMessage";
 import { ReactComponent as LoadingSpinner } from "../svgs/loading.svg";
 
-const GamePage: FunctionComponent = () => {
+export const GamePage: FunctionComponent = () => {
   const user = useAuth().user!;
   const history = useHistory();
   const { name } = useParams();
@@ -58,5 +58,3 @@ const GamePage: FunctionComponent = () => {
     </div>
   );
 };
-
-export default GamePage;

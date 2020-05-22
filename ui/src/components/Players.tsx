@@ -6,7 +6,7 @@ interface Props {
   playerColor: Color;
 }
 
-const Players: FunctionComponent<Props> = ({ game, playerColor }) => {
+export const Players: FunctionComponent<Props> = ({ game, playerColor }) => {
   const activePlayer = getActivePlayer(game);
   const players =
     playerColor === Color.Black ? game.players : game.players.reverse();
@@ -22,5 +22,3 @@ const Players: FunctionComponent<Props> = ({ game, playerColor }) => {
     </div>
   );
 };
-
-export default Players;

@@ -1,9 +1,9 @@
 import React, { FormEvent, FunctionComponent, useState } from "react";
-import useAuth from "../hooks/use-auth";
+import { useAuth } from "../hooks/use-auth";
 import { Color, PieceType } from "../models/Game";
-import Piece from "./Piece";
+import { Piece } from "./Piece";
 
-const UnauthenticatedApp: FunctionComponent = () => {
+export const UnauthenticatedApp: FunctionComponent = () => {
   const { login } = useAuth();
   const [username, setUsername] = useState("");
 
@@ -49,5 +49,3 @@ const UnauthenticatedApp: FunctionComponent = () => {
     </div>
   );
 };
-
-export default UnauthenticatedApp;
