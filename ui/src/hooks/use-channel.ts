@@ -5,10 +5,10 @@ import useSocket from "./use-socket";
 export default (
   name: string,
   onJoin?: (payload: any) => void
-): { channel: Channel | undefined; error?: any } => {
+): { channel: Channel | undefined; error?: string } => {
   const { socket } = useSocket() || {};
   const [channel, setChannel] = useState<Channel | undefined>();
-  const [error, setError] = useState<any | undefined>();
+  const [error, setError] = useState<string | undefined>();
 
   useEffect(() => {
     if (!socket || error) {

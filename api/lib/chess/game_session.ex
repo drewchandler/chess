@@ -19,6 +19,13 @@ defmodule Chess.GameSession do
     {:via, Registry, {Chess.Registry.GameSession, name}}
   end
 
+  def exists?(name) do
+    case List.first(Registry.lookup(Chess.Registry.GameSession, name)) do
+      nil -> false
+      {pid, _value} -> Process.alive?(pid)
+    end
+  end
+
   def move(name, player, from, to) do
     GenServer.call(via(name), {:move, player, from, to})
   end

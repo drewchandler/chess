@@ -9,7 +9,7 @@ interface GameDispatch {
 
 export default (
   name: string
-): { game?: Game; error?: any; dispatch: GameDispatch } => {
+): { game?: Game; error?: string; dispatch: GameDispatch } => {
   const [game, setGame] = useState<Game | undefined>();
   const onJoin = useCallback((payload) => setGame(payload.game), [setGame]);
   const { error, channel } = useChannel(`game:${name}`, onJoin);
@@ -29,9 +29,10 @@ export default (
     },
     legalMoves(position: number): Promise<number[]> {
       return new Promise((resolve, reject) => {
-          channel?.push("legal_moves", { position })
-            .receive("ok", ({ moves }) => resolve(moves))
-            .receive("error", reject);
+        channel
+          ?.push("legal_moves", { position })
+          .receive("ok", ({ moves }) => resolve(moves))
+          .receive("error", reject);
       });
     },
   };

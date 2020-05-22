@@ -4,7 +4,11 @@ defmodule ChessWeb.GameChannel do
   use ChessWeb, :channel
 
   def join("game:" <> name, _payload, socket) do
-    {:ok, %{game: GameSession.current_state(name)}, socket}
+    if GameSession.exists?(name) do
+      {:ok, %{game: GameSession.current_state(name)}, socket}
+    else
+      {:error, %{message: "Game does not exist"}}
+    end
   end
 
   def handle_in("move", %{"from" => raw_from, "to" => raw_to}, socket) do
