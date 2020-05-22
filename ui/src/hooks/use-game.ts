@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { Game } from "../models/Game";
+import { Game, State } from "../models/Game";
 import { useChannel } from "./use-channel";
 
 interface GameDispatch {
@@ -12,16 +12,26 @@ export const useGame = (
 ): { game?: Game; error?: string; dispatch: GameDispatch } => {
   const [game, setGame] = useState<Game | undefined>();
   const onJoin = useCallback((payload) => setGame(payload.game), [setGame]);
-  const { error, channel } = useChannel(`game:${name}`, onJoin);
+  const { error, channel, leave } = useChannel(`game:${name}`, onJoin);
   useEffect(() => {
     if (!channel) {
       return;
     }
 
-    channel.on("update", (payload) => {
+    const ref = channel.on("update", (payload: { game: Game }) => {
       setGame(payload.game);
+
+      if (
+        [State.WhiteVictory, State.BlackVictory].includes(payload.game.state)
+      ) {
+        leave();
+      }
     });
-  }, [channel]);
+
+    return () => {
+      channel.off("update", ref);
+    };
+  }, [channel, leave]);
 
   const dispatch = {
     makeMove(from: number, to: number) {

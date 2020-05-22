@@ -25,6 +25,10 @@ defmodule Chess.Game do
     end
   end
 
+  def done?(%{state: :white_victory}), do: true
+  def done?(%{state: :black_victory}), do: true
+  def done?(_), do: false
+
   def legal_moves(game, position), do: Board.legal_moves(game.board, position)
 
   defp color_for_player(%{players: [player, _]}, player), do: {:ok, :white}

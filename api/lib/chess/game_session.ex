@@ -46,8 +46,15 @@ defmodule Chess.GameSession do
 
   def handle_call({:move, player, from, to}, _from, game) do
     case Game.move(game, player, from, to) do
-      {:ok, new_game} -> {:reply, {:ok, new_game}, new_game}
-      error -> {:reply, error, game}
+      {:ok, new_game} ->
+        if Game.done?(new_game) do
+          {:stop, "Game over", {:ok, new_game}, new_game}
+        else
+          {:reply, {:ok, new_game}, new_game}
+        end
+
+      error ->
+        {:reply, error, game}
     end
   end
 

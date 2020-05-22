@@ -9,7 +9,7 @@ interface Props {
 export const Players: FunctionComponent<Props> = ({ game, playerColor }) => {
   const activePlayer = getActivePlayer(game);
   const players =
-    playerColor === Color.Black ? game.players : game.players.reverse();
+    playerColor === Color.Black ? game.players : [...game.players].reverse();
 
   return (
     <div>
