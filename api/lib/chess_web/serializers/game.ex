@@ -1,7 +1,7 @@
 defimpl Jason.Encoder, for: [Chess.Game] do
   def encode(game, opts) do
     game
-    |> Map.take([:players, :state])
+    |> Map.take([:players, :state, :clocks])
     |> Map.put(
       :board,
       for(

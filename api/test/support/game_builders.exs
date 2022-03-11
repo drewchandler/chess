@@ -16,7 +16,7 @@ defmodule GameBuilders do
 
   def game_fields(overrides) do
     Keyword.merge(
-      [players: ["white", "black"]],
+      [players: ["white", "black"], clocks: [600_000, 600_000]],
       overrides
     )
   end

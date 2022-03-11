@@ -9,6 +9,7 @@ defmodule Chess.Application do
     # List all child processes to be supervised
     children = [
       ChessWeb.Endpoint,
+      {Phoenix.PubSub, name: Chess.PubSub},
       {Registry, [name: Chess.Registry.GameSession, keys: :unique]},
       {Chess.GameMaster, [name: Chess.GameMaster]},
       %{

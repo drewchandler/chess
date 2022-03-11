@@ -5,6 +5,7 @@ defmodule ChessWeb.GameChannel do
 
   def join("game:" <> name, _payload, socket) do
     if GameSession.exists?(name) do
+      GameSession.subscribe(name)
       {:ok, %{game: GameSession.current_state(name)}, socket}
     else
       {:error, %{message: "Game does not exist"}}
@@ -14,8 +15,7 @@ defmodule ChessWeb.GameChannel do
   def handle_in("move", %{"from" => raw_from, "to" => raw_to}, socket) do
     with {:ok, from} <- convert_to_position(raw_from),
          {:ok, to} <- convert_to_position(raw_to),
-         {:ok, game} <- GameSession.move(via(socket.topic), socket.assigns.username, from, to) do
-      broadcast!(socket, "update", %{game: game})
+         {:ok, _} <- GameSession.move(via(socket.topic), socket.assigns.username, from, to) do
       {:noreply, socket}
     else
       {:error, error} ->
@@ -31,6 +31,10 @@ defmodule ChessWeb.GameChannel do
       {:error, error} ->
         {:reply, {:error, %{message: error}}, socket}
     end
+  end
+
+  def handle_info({:game_update, game}, socket) do
+    push(socket, "update", %{game: game})
   end
 
   defp via("game:" <> name), do: name

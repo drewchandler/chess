@@ -1,8 +1,8 @@
 defmodule Chess.Game do
   alias Chess.{Board, CheckDetection}
 
-  @enforce_keys [:board, :players, :state]
-  defstruct [:board, :players, :state]
+  @enforce_keys [:board, :players, :state, :clocks]
+  defstruct [:board, :players, :state, :clocks]
 
   def new(fields) do
     struct!(
@@ -25,11 +25,27 @@ defmodule Chess.Game do
     end
   end
 
+  def set_clock(game, player, time) do
+    player_index = game.players |> Enum.find_index(fn p -> p == player end)
+    new_clocks = game.clocks |> List.replace_at(player_index, time)
+    update_game_with_clocks(game, new_clocks)
+  end
+
   def done?(%{state: :white_victory}), do: true
   def done?(%{state: :black_victory}), do: true
   def done?(_), do: false
 
   def legal_moves(game, position), do: Board.legal_moves(game.board, position)
+
+  defp update_game_with_clocks(game, clocks = [white_clock, _]) when white_clock <= 0 do
+    %{game | clocks: clocks, state: :black_victory}
+  end
+
+  defp update_game_with_clocks(game, clocks = [_, black_clock]) when black_clock <= 0 do
+    %{game | clocks: clocks, state: :white_victory}
+  end
+
+  defp update_game_with_clocks(game, clocks), do: %{game | clocks: clocks}
 
   defp color_for_player(%{players: [player, _]}, player), do: {:ok, :white}
   defp color_for_player(%{players: [_, player]}, player), do: {:ok, :black}

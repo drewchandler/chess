@@ -30,6 +30,7 @@ export interface Game {
   board: Board;
   players: string[];
   state: State;
+  clocks: number[];
 }
 
 export const getPlayerColor = (game: Game, player: string) => {
