@@ -14,6 +14,7 @@ services:
     volumes:
       - ./api/:/app
       - /app/deps
+      - /app/_build
 
   nginx:
     image: nginx:latest

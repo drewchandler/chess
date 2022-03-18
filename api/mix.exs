@@ -17,7 +17,7 @@ defmodule Chess.MixProject do
       ],
       app: :chess,
       version: "0.1.0",
-      elixir: "~> 1.11",
+      elixir: "~> 1.13",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
@@ -31,7 +31,7 @@ defmodule Chess.MixProject do
   def application do
     [
       mod: {Chess.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :crypto]
     ]
   end
 
@@ -44,17 +44,17 @@ defmodule Chess.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:excoveralls, "~> 0.12.2", only: :test},
-      {:mix_test_watch, "~> 1.1.0", only: :dev, runtime: false},
-      {:earmark, "~> 1.4.3", only: :dev, runtime: false},
-      {:ex_doc, "~> 0.28.2", only: :dev, runtime: false},
-      {:phoenix, "~> 1.5.0"},
+      {:phoenix, "~> 1.6.6"},
       {:phoenix_pubsub, "~> 2.0"},
+      {:telemetry_metrics, "~> 0.6"},
+      {:telemetry_poller, "~> 1.0"},
       {:gettext, "~> 0.11"},
-      {:jason, "~> 1.0"},
-      {:plug_cowboy, "~> 2.1"},
+      {:jason, "~> 1.2"},
+      {:plug_cowboy, "~> 2.5"},
+      {:elixir_uuid, "~> 1.2"},
       {:credo, "~> 1.6.4", only: [:dev, :test], runtime: false},
-      {:elixir_uuid, "~> 1.2"}
+      {:excoveralls, "~> 0.14.4", only: :test},
+      {:mix_test_watch, "~> 1.1.0", only: :dev, runtime: false}
     ]
   end
 end
