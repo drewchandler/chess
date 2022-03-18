@@ -1,4 +1,4 @@
-defmodule Chess.GameTest do
+defmodule Chess.Rules.GameTest do
   use ExUnit.Case
   use GameBuilders
 

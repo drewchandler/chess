@@ -1,8 +1,7 @@
-defmodule Chess.MovesTest do
+defmodule Chess.Rules.MovesTest do
   use ExUnit.Case
-  use MoveHelpers
 
-  alias Chess.{Piece, Position, Moves}
+  alias Chess.Rules.{Piece, Position, Moves}
 
   describe "bishops" do
     test "can move diagonally" do
@@ -471,5 +470,9 @@ defmodule Chess.MovesTest do
                Position.new(5, 5)
              ]
     end
+  end
+
+  def sort_moves(moves) do
+    moves |> Enum.sort(fn a, b -> a.x < b.x || (a.x == b.x && a.y <= b.y) end)
   end
 end

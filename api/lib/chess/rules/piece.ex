@@ -1,4 +1,4 @@
-defmodule Chess.Piece do
+defmodule Chess.Rules.Piece do
   @enforce_keys [:type, :color]
   @derive Jason.Encoder
   defstruct [:type, :color]

@@ -1,5 +1,5 @@
-defmodule Chess.Game do
-  alias Chess.{Board, CheckDetection}
+defmodule Chess.Rules.Game do
+  alias Chess.Rules.{Board, CheckDetection}
 
   @enforce_keys [:board, :players, :state]
   defstruct [:board, :players, :state]

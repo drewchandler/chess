@@ -1,5 +1,5 @@
-defmodule Chess.Board do
-  alias Chess.{
+defmodule Chess.Rules.Board do
+  alias Chess.Rules.{
     CheckDetection,
     Piece,
     Position,

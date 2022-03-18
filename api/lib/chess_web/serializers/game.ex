@@ -1,4 +1,4 @@
-defimpl Jason.Encoder, for: [Chess.Game] do
+defimpl Jason.Encoder, for: [Chess.Rules.Game] do
   def encode(game, opts) do
     game
     |> Map.take([:players, :state])

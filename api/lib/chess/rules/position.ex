@@ -1,4 +1,4 @@
-defmodule Chess.Position do
+defmodule Chess.Rules.Position do
   @enforce_keys [:x, :y]
   defstruct [:x, :y]
 

@@ -1,5 +1,5 @@
-defmodule Chess.Moves do
-  alias Chess.{Board, Piece, Position}
+defmodule Chess.Rules.Moves do
+  alias Chess.Rules.{Board, Piece, Position}
 
   def bishop_moves(board, color, position) do
     moves_in_direction(board, color, position, {-1, -1}, []) ++

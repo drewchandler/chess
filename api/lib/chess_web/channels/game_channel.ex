@@ -1,5 +1,5 @@
 defmodule ChessWeb.GameChannel do
-  alias Chess.{GameSession, Position}
+  alias Chess.{GameSession, Rules.Position}
 
   use ChessWeb, :channel
 

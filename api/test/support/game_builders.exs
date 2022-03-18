@@ -1,12 +1,12 @@
 defmodule GameBuilders do
   defmacro __using__(_options) do
     quote do
-      alias Chess.{Board, Game, Piece, Position}
+      alias Chess.Rules.{Board, Game, Piece, Position}
       import GameBuilders, only: :functions
     end
   end
 
-  alias Chess.Game
+  alias Chess.Rules.Game
 
   def build_game(overrides \\ []) do
     overrides

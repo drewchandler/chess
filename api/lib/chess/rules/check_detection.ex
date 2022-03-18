@@ -1,5 +1,5 @@
-defmodule Chess.CheckDetection do
-  alias Chess.{Board, Piece}
+defmodule Chess.Rules.CheckDetection do
+  alias Chess.Rules.{Board, Piece}
 
   def check?(board, color) do
     king_position = find_king(board, color)

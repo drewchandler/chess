@@ -1,5 +1,5 @@
-defmodule Chess.BoardTest do
-  alias Chess.{Board, Piece, Position}
+defmodule Chess.Rules.BoardTest do
+  alias Chess.Rules.{Board, Piece, Position}
   use ExUnit.Case
 
   describe "move/3" do
