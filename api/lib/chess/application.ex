@@ -8,6 +8,7 @@ defmodule Chess.Application do
   def start(_type, _args) do
     # List all child processes to be supervised
     children = [
+      {Phoenix.PubSub, name: Chess.PubSub},
       ChessWeb.Endpoint,
       {Registry, [name: Chess.Registry.GameSession, keys: :unique]},
       {Chess.GameMaster, [name: Chess.GameMaster]},

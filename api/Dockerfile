@@ -1,4 +1,4 @@
-FROM elixir:1.9.4
+FROM elixir:1.11.4
 WORKDIR /app
 RUN mix do local.hex --force, local.rebar --force
 ADD mix.exs mix.lock /app/

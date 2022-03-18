@@ -17,7 +17,7 @@ defmodule Chess.MixProject do
       ],
       app: :chess,
       version: "0.1.0",
-      elixir: "~> 1.5",
+      elixir: "~> 1.11",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
@@ -45,17 +45,15 @@ defmodule Chess.MixProject do
   defp deps do
     [
       {:excoveralls, "~> 0.12.2", only: :test},
-      {:mix_test_watch, "~> 1.0.2", only: :dev, runtime: false},
-      {:dialyxir, "~> 1.0.0-rc.7", only: :dev, runtime: false},
+      {:mix_test_watch, "~> 1.1.0", only: :dev, runtime: false},
       {:earmark, "~> 1.4.3", only: :dev, runtime: false},
-      {:ex_doc, "~> 0.21.3", only: :dev, runtime: false},
-      {:phoenix, "~> 1.4.10"},
-      {:phoenix_pubsub, "~> 1.1"},
+      {:ex_doc, "~> 0.28.2", only: :dev, runtime: false},
+      {:phoenix, "~> 1.5.0"},
+      {:phoenix_pubsub, "~> 2.0"},
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
-      {:plug_cowboy, "~> 2.0"},
-      {:credo, "~> 1.3.0-rc2", only: [:dev, :test], runtime: false},
-      {:gen_stage, "~> 1.0"},
+      {:plug_cowboy, "~> 2.1"},
+      {:credo, "~> 1.6.4", only: [:dev, :test], runtime: false},
       {:elixir_uuid, "~> 1.2"}
     ]
   end
