@@ -3,12 +3,7 @@ defmodule Chess.Board do
     CheckDetection,
     Piece,
     Position,
-    Pieces.Bishop,
-    Pieces.King,
-    Pieces.Knight,
-    Pieces.Pawn,
-    Pieces.Queen,
-    Pieces.Rook
+    Moves
   }
 
   @initial_board %{
@@ -68,12 +63,12 @@ defmodule Chess.Board do
     piece = piece_at(board, position)
 
     case piece do
-      %Piece{type: :bishop, color: color} -> Bishop.moves(board, color, position)
-      %Piece{type: :king, color: color} -> King.moves(board, color, position)
-      %Piece{type: :knight, color: color} -> Knight.moves(board, color, position)
-      %Piece{type: :pawn, color: color} -> Pawn.moves(board, color, position)
-      %Piece{type: :queen, color: color} -> Queen.moves(board, color, position)
-      %Piece{type: :rook, color: color} -> Rook.moves(board, color, position)
+      %Piece{type: :bishop, color: color} -> Moves.bishop_moves(board, color, position)
+      %Piece{type: :king, color: color} -> Moves.king_moves(board, color, position)
+      %Piece{type: :knight, color: color} -> Moves.knight_moves(board, color, position)
+      %Piece{type: :pawn, color: color} -> Moves.pawn_moves(board, color, position)
+      %Piece{type: :queen, color: color} -> Moves.queen_moves(board, color, position)
+      %Piece{type: :rook, color: color} -> Moves.rook_moves(board, color, position)
       _ -> []
     end
   end
