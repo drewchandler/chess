@@ -13,6 +13,7 @@ services:
     build: ./api
     volumes:
       - ./api/:/app
+      - /app/deps
 
   nginx:
     image: nginx:latest
