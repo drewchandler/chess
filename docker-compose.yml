@@ -1,27 +1,10 @@
 version: "3.7"
 services:
-  ui:
-    build: ./ui
+  app:
+    build: .
     volumes:
-      - ./ui/:/app
-      - /app/node_modules
-    environment:
-      - "CHOKIDAR_USEPOLLING=true"
-    tty: true
-
-  api:
-    build: ./api
-    volumes:
-      - ./api/:/app
+      - ./:/app
       - /app/deps
       - /app/_build
-
-  nginx:
-    image: nginx:latest
-    volumes:
-      - ./docker/nginx-dev.conf:/etc/nginx/nginx.conf
     ports:
-      - "3000:80"
-    depends_on:
-      - ui
-      - api
+      - "4000:4000"
