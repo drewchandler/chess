@@ -11,7 +11,9 @@ config :chess, ChessWeb.Endpoint,
   debug_errors: true,
   code_reloader: true,
   check_origin: false,
-  watchers: []
+  watchers: [
+    esbuild: {Esbuild, :install_and_run, [:default, ~w(--sourcemap=inline --watch)]}
+  ]
 
 # ## SSL Support
 #
@@ -39,6 +41,17 @@ config :chess, ChessWeb.Endpoint,
 
 # Do not include metadata nor timestamps in development logs
 config :logger, :console, format: "[$level] $message\n"
+
+# Watch static and templates for browser reloading.
+config :chess, ChessWeb.Endpoint,
+  live_reload: [
+    patterns: [
+      ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
+      ~r"priv/gettext/.*(po)$",
+      ~r"lib/chess_web/(live|views)/.*(ex)$",
+      ~r"lib/chess_web/templates/.*(eex)$"
+    ]
+  ]
 
 # Set a higher stacktrace during development. Avoid configuring such
 # in production as building large stacktraces may be expensive.

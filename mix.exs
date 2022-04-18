@@ -21,6 +21,7 @@ defmodule Chess.MixProject do
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
+      aliases: aliases(),
       deps: deps()
     ]
   end
@@ -45,7 +46,12 @@ defmodule Chess.MixProject do
   defp deps do
     [
       {:phoenix, "~> 1.6.6"},
+      {:phoenix_html, "~> 3.0"},
+      {:phoenix_live_dashboard, "~> 0.6"},
+      {:phoenix_live_reload, "~> 1.3", only: :dev},
+      {:phoenix_live_view, "~> 0.17.5"},
       {:phoenix_pubsub, "~> 2.0"},
+      {:esbuild, "~> 0.3", runtime: Mix.env() == :dev},
       {:telemetry_metrics, "~> 0.6"},
       {:telemetry_poller, "~> 1.0"},
       {:gettext, "~> 0.11"},
@@ -55,6 +61,12 @@ defmodule Chess.MixProject do
       {:credo, "~> 1.6.4", only: [:dev, :test], runtime: false},
       {:excoveralls, "~> 0.14.4", only: :test},
       {:mix_test_watch, "~> 1.1.0", only: :dev, runtime: false}
+    ]
+  end
+
+  def aliases do
+    [
+      "assets.deploy": ["esbuild default --minify", "phx.digest"]
     ]
   end
 end
