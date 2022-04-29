@@ -97,6 +97,7 @@ defmodule ChessWeb do
       import Phoenix.View
 
       import ChessWeb.ErrorHelpers
+      import ChessWeb.LayoutHelpers
       import ChessWeb.Gettext
       alias ChessWeb.Router.Helpers, as: Routes
     end

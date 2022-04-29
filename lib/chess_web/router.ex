@@ -10,18 +10,23 @@ defmodule ChessWeb.Router do
     plug :put_secure_browser_headers
   end
 
-  pipeline :api do
-    plug :accepts, ["json"]
-  end
-
   scope "/", ChessWeb do
     pipe_through :browser
 
-    get "/", PageController, :index
-  end
+    post "/session", SessionController, :create
+    delete "/session", SessionController, :destroy
 
-  scope "/api", ChessWeb do
-    pipe_through :api
+    live_session(:unauthenticated,
+      on_mount: [{ChessWeb.UserAuth, :ensure_unauthenticated}]
+    ) do
+      live "/sign-in", SignInLive, :index
+    end
+
+    live_session(:authenticated,
+      on_mount: [{ChessWeb.UserAuth, :ensure_authenticated}]
+    ) do
+      live "/", LobbyLive, :index
+    end
   end
 
   if Mix.env() in [:dev, :test] do

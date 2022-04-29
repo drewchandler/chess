@@ -1,45 +1,92 @@
 defmodule ChessWeb.LiveHelpers do
+  import Phoenix.HTML.Form
   import Phoenix.LiveView
   import Phoenix.LiveView.Helpers
+  import ChessWeb.LayoutHelpers
 
-  alias Phoenix.LiveView.JS
+  alias ChessWeb.Router.Helpers, as: Routes
+  alias ChessWeb.Endpoint
 
-  @doc """
-  Renders a live component inside a modal.
-  The rendered modal receives a `:return_to` option to properly update
-  the URL when the modal is closed.
-  """
-  def modal(assigns) do
-    assigns = assign_new(assigns, :return_to, fn -> nil end)
+  def piece(assigns) do
+    svg_options = assigns_to_attributes(assigns, [:color, :type])
+    assigns = assign(assigns, svg_options: svg_options)
 
     ~H"""
-    <div id="modal" class="phx-modal fade-in" phx-remove={hide_modal()}>
-      <div
-        id="modal-content"
-        class="phx-modal-content fade-in-scale"
-        phx-click-away={JS.dispatch("click", to: "#close")}
-        phx-window-keydown={JS.dispatch("click", to: "#close")}
-        phx-key="escape"
-      >
-        <%= if @return_to do %>
-          <%= live_patch "✖",
-            to: @return_to,
-            id: "close",
-            class: "phx-modal-close",
-            phx_click: hide_modal()
-          %>
-        <% else %>
-          <a id="close" href="#" class="phx-modal-close" phx-click={hide_modal()}>✖</a>
-        <% end %>
-        <%= render_slot(@inner_block) %>
-      </div>
+      <svg {@svg_options}>
+        <use href={Routes.static_path(Endpoint, "/assets/images/chess_pieces.svg##{@color}-#{@type}")} />
+      </svg>
+    """
+  end
+
+  def input(assigns) do
+    input_options = assigns_to_attributes(assigns, [:form, :field])
+    assigns = assign(assigns, input_options: input_options)
+
+    ~H"""
+      <.stack>
+        <%= label(@form, @field, class: "block text-gray-700 text-sm font-bold mb-2") %>
+        <%= text_input(@form, @field, [class: "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"] ++ @input_options) %>
+      </.stack>
+    """
+  end
+
+  def box(assigns) do
+    ~H"""
+    <div class="border border-gray-700 bg-white p-4 rounded shadow">
+      <%= render_slot(@inner_block) %>
     </div>
     """
   end
 
-  defp hide_modal(js \\ %JS{}) do
-    js
-    |> JS.hide(to: "#modal", transition: "fade-out")
-    |> JS.hide(to: "#modal-content", transition: "fade-out-scale")
+  def button(assigns) do
+    button_options = assigns_to_attributes(assigns, [])
+
+    ~H"""
+    <button class="border bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" {button_options}>
+      <%= render_slot(@inner_block) %>
+    </button>
+    """
+  end
+
+  def typography(assigns) do
+    assigns =
+      assign(
+        assigns,
+        text_class:
+          case assigns[:variant] do
+            "title" -> "text-4xl"
+            _ -> "text-md"
+          end,
+        margin_class:
+          case assigns[:gutter] do
+            "4" -> "mb-4"
+            _ -> "mb-0"
+          end
+      )
+
+    ~H"""
+    <span class={"#{@text_class} #{@margin_class}"}>
+      <%= render_slot(@inner_block) %>
+    </span>
+    """
+  end
+
+  def link(assigns) do
+    link_options =
+      assigns
+      |> assigns_to_attributes([:href])
+      |> Keyword.put(:to, assigns[:href] || "#")
+
+    assigns = assign(assigns, link_options: link_options)
+
+    ~H"""
+    <%= Phoenix.HTML.Link.link @link_options do%>
+      <%= render_slot(@inner_block) %>
+    <% end %>
+    """
+  end
+
+  def sign_out_path() do
+    Routes.session_path(Endpoint, :destroy)
   end
 end
