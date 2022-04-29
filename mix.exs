@@ -45,22 +45,23 @@ defmodule Chess.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:credo, "~> 1.6.4", only: [:dev, :test], runtime: false},
+      {:elixir_uuid, "~> 1.2"},
+      {:esbuild, "~> 0.3", runtime: Mix.env() == :dev},
+      {:excoveralls, "~> 0.14.4", only: :test},
+      {:gettext, "~> 0.11"},
+      {:jason, "~> 1.2"},
+      {:mix_test_watch, "~> 1.1.0", only: :dev, runtime: false},
       {:phoenix, "~> 1.6.6"},
       {:phoenix_html, "~> 3.0"},
       {:phoenix_live_dashboard, "~> 0.6"},
       {:phoenix_live_reload, "~> 1.3", only: :dev},
       {:phoenix_live_view, "~> 0.17.5"},
       {:phoenix_pubsub, "~> 2.0"},
-      {:esbuild, "~> 0.3", runtime: Mix.env() == :dev},
-      {:telemetry_metrics, "~> 0.6"},
-      {:telemetry_poller, "~> 1.0"},
-      {:gettext, "~> 0.11"},
-      {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
-      {:elixir_uuid, "~> 1.2"},
-      {:credo, "~> 1.6.4", only: [:dev, :test], runtime: false},
-      {:excoveralls, "~> 0.14.4", only: :test},
-      {:mix_test_watch, "~> 1.1.0", only: :dev, runtime: false}
+      {:tailwind, "~> 0.1", runtime: Mix.env() == :dev},
+      {:telemetry_metrics, "~> 0.6"},
+      {:telemetry_poller, "~> 1.0"}
     ]
   end
 
