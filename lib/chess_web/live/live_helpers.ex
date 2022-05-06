@@ -39,10 +39,18 @@ defmodule ChessWeb.LiveHelpers do
   end
 
   def button(assigns) do
-    button_options = assigns_to_attributes(assigns, [])
+    button_options = assigns_to_attributes(assigns, [:size])
+
+    button_styles =
+      case assigns[:size] do
+        "6xl" -> "text-6xl py-8 px-24"
+        _ -> "py-2 px-4"
+      end
+
+    assigns = assign(assigns, button_options: button_options, button_styles: button_styles)
 
     ~H"""
-    <button class="border bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" {button_options}>
+    <button class={"border bg-blue-500 hover:bg-blue-700 text-white font-bold #{@button_styles} rounded focus:outline-none focus:shadow-outline"} {@button_options}>
       <%= render_slot(@inner_block) %>
     </button>
     """
@@ -52,16 +60,8 @@ defmodule ChessWeb.LiveHelpers do
     assigns =
       assign(
         assigns,
-        text_class:
-          case assigns[:variant] do
-            "title" -> "text-4xl"
-            _ -> "text-md"
-          end,
-        margin_class:
-          case assigns[:gutter] do
-            "4" -> "mb-4"
-            _ -> "mb-0"
-          end
+        text_class: text_class(assigns[:variant]),
+        margin_class: margin_class(assigns[:gutter])
       )
 
     ~H"""
@@ -80,13 +80,35 @@ defmodule ChessWeb.LiveHelpers do
     assigns = assign(assigns, link_options: link_options)
 
     ~H"""
-    <%= Phoenix.HTML.Link.link @link_options do%>
+    <%= Phoenix.HTML.Link.link @link_options do %>
       <%= render_slot(@inner_block) %>
     <% end %>
+    """
+  end
+
+  def modal(assigns) do
+    ~H"""
+    <.center>
+      <.box>
+        <%= render_slot(@inner_block) %>
+      </.box>
+    </.center>
+    """
+  end
+
+  def spinner(assigns) do
+    ~H"""
+      <img src={Routes.static_path(Endpoint, "/assets/images/loading.svg")} />
     """
   end
 
   def sign_out_path() do
     Routes.session_path(Endpoint, :destroy)
   end
+
+  defp text_class("title"), do: "text-4xl"
+  defp text_class(_), do: "text-md"
+
+  defp margin_class("4"), do: "mb-4"
+  defp margin_class(_), do: "mb-0"
 end

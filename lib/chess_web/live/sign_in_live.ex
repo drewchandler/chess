@@ -22,7 +22,7 @@ defmodule ChessWeb.SignInLive do
             phx-submit="validate"
             phx-trigger-action={@trigger_submit}
           >
-            <.stack gap={true}>
+            <.stack gap="6">
               <.input form={f} field={:username} value={@username} />
 
               <.button>Sign In</.button>

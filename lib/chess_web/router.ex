@@ -26,6 +26,7 @@ defmodule ChessWeb.Router do
       on_mount: [{ChessWeb.UserAuth, :ensure_authenticated}]
     ) do
       live "/", LobbyLive, :index
+      live "/game/:id", GameLive, :show
     end
   end
 
