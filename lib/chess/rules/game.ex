@@ -31,9 +31,17 @@ defmodule Chess.Rules.Game do
 
   def legal_moves(game, position), do: Board.legal_moves(game.board, position)
 
-  defp color_for_player(%{players: [player, _]}, player), do: {:ok, :white}
-  defp color_for_player(%{players: [_, player]}, player), do: {:ok, :black}
-  defp color_for_player(_, _), do: {:error, "You are not a player in this game."}
+  def color_for_player(%{players: [player, _]}, player), do: {:ok, :white}
+  def color_for_player(%{players: [_, player]}, player), do: {:ok, :black}
+  def color_for_player(_, _), do: {:error, "You are not a player in this game."}
+
+  def active_player(%{state: :white_turn, players: [player, _]}), do: player
+  def active_player(%{state: :black_turn, players: [_, player]}), do: player
+  def active_player(_), do: nil
+
+  def winning_player(%{state: :white_victory, players: [player, _]}), do: player
+  def winning_player(%{state: :black_victory, players: [_, player]}), do: player
+  def winning_player(_), do: nil
 
   defp validate_color_is_active(%{state: :white_turn}, :white), do: :ok
   defp validate_color_is_active(%{state: :black_turn}, :black), do: :ok

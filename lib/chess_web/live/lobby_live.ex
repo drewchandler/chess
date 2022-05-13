@@ -5,24 +5,24 @@ defmodule ChessWeb.LobbyLive do
   def render(assigns) do
     ~H"""
     <%= cond do %>
-    <% @in_queue -> %>
-      <.modal>
-        <.stack>
-          <.spinner />
-          <.button phx-click="leave-queue">Cancel</.button>
-        </.stack>
-      </.modal>
-    <% @error -> %>
-      <.modal>
-        <.stack>
-          <%= @error %>
-          <.button phx-click="dismiss-error">Ok</.button>
-        </.stack>
-      </.modal>
-    <% true -> %>
-      <.center>
-        <.button size="6xl" phx-click="join-queue">Play</.button>
-      </.center>
+      <% @in_queue -> %>
+        <.modal>
+          <.stack>
+            <.spinner />
+            <.button phx-click="leave-queue">Cancel</.button>
+          </.stack>
+        </.modal>
+      <% @error -> %>
+        <.modal>
+          <.stack>
+            <%= @error %>
+            <.button phx-click="dismiss-error">Ok</.button>
+          </.stack>
+        </.modal>
+      <% true -> %>
+        <.center>
+          <.button size="6xl" phx-click="join-queue">Play</.button>
+        </.center>
     <% end %>
     """
   end
@@ -36,10 +36,9 @@ defmodule ChessWeb.LobbyLive do
   def handle_event("join-queue", _, socket) do
     me = self()
 
-    Chess.MatchmakingQueue.join(socket.assigns[:current_user], fn game_name ->
-      send(me, {:matched, game_name})
-    end)
-    |> case do
+    case Chess.MatchmakingQueue.join(socket.assigns[:current_user], fn game_name ->
+           send(me, {:matched, game_name})
+         end) do
       :ok -> {:noreply, assign(socket, in_queue: true)}
       {:error, error} -> {:noreply, assign(socket, error: error)}
     end
@@ -62,6 +61,7 @@ defmodule ChessWeb.LobbyLive do
     {:noreply, push_redirect(socket, to: Routes.game_path(socket, :show, game_name))}
   end
 
+  @impl true
   def terminate({:shutdown, _}, socket) do
     if socket.assigns[:in_queue] do
       Chess.MatchmakingQueue.leave(socket.assigns[:current_user])

@@ -18,15 +18,74 @@
 // Include phoenix_html to handle method=PUT/DELETE in forms and buttons.
 import "phoenix_html"
 // Establish Phoenix Socket and LiveView configuration.
-import {Socket} from "phoenix"
-import {LiveSocket} from "phoenix_live_view"
+import { Socket } from "phoenix"
+import { LiveSocket } from "phoenix_live_view"
 import topbar from "../vendor/topbar"
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
-let liveSocket = new LiveSocket("/live", Socket, {params: {_csrf_token: csrfToken}})
+
+let Hooks = {}
+
+Hooks.Board = {
+  mounted() {
+    this.fetchMoves = debounce(this.fetchMoves.bind(this), 300)
+    this.clearMoves = debounce(this.clearMoves.bind(this), 300)
+
+    this.el.addEventListener("mouseenter", this.mouseEnter.bind(this), true)
+    this.el.addEventListener("mouseleave", this.mouseLeave.bind(this), true)
+    this.el.addEventListener("dragstart", this.dragStart.bind(this))
+    this.el.addEventListener("drop", this.drop.bind(this))
+  },
+
+  mouseEnter(e) {
+    if (!e.target.matches('[draggable]')) return
+
+    this.clearMoves.cancel()
+    this.fetchMoves(e.target)
+  },
+
+  mouseLeave(e) {
+    if (!e.target.matches('[draggable]')) return
+
+    this.fetchMoves.cancel()
+    this.clearMoves()
+  },
+
+  dragStart(e) {
+    e.dataTransfer.setData("text/json", JSON.stringify(this.getPosition(e.target)))
+  },
+
+  drop(e) {
+    let target = this.getTarget(e, "[data-x]")
+    if (!target) return
+
+    this.pushEvent("move", { from: JSON.parse(e.dataTransfer.getData("text/json")), to: this.getPosition(target) })
+  },
+
+  fetchMoves(target) {
+    this.pushEvent("get-moves", this.getPosition(target))
+  },
+
+  clearMoves(target) {
+    this.pushEvent("clear-moves")
+  },
+
+  getPosition(el) {
+    return {
+      x: parseInt(el.getAttribute("data-x"), 10),
+      y: parseInt(el.getAttribute("data-y"), 10)
+    }
+  },
+
+  getTarget(e, selector) {
+    return e.target.matches(selector) ? e.target : e.target.closest(selector)
+  }
+}
+
+let liveSocket = new LiveSocket("/live", Socket, { hooks: Hooks, params: { _csrf_token: csrfToken } })
 
 // Show progress bar on live navigation and form submits
-topbar.config({barColors: {0: "#29d"}, shadowColor: "rgba(0, 0, 0, .3)"})
+topbar.config({ barColors: { 0: "#29d" }, shadowColor: "rgba(0, 0, 0, .3)" })
 window.addEventListener("phx:page-loading-start", info => topbar.show())
 window.addEventListener("phx:page-loading-stop", info => topbar.hide())
 
@@ -38,3 +97,27 @@ liveSocket.connect()
 // >> liveSocket.enableLatencySim(1000)  // enabled for duration of browser session
 // >> liveSocket.disableLatencySim()
 window.liveSocket = liveSocket
+
+let debounce = (callback, wait) => {
+  let timeoutId = null
+  let cancelled = false
+
+  let cancel = () => {
+    cancelled = true
+  }
+
+  let debounced = (...args) => {
+    window.clearTimeout(timeoutId)
+    cancelled = false
+
+    timeoutId = window.setTimeout(() => {
+      if (!cancelled) {
+        callback.apply(null, args)
+      }
+    }, wait)
+  }
+
+  debounced.cancel = cancel
+
+  return debounced
+}

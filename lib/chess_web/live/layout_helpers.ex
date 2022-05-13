@@ -25,7 +25,7 @@ defmodule ChessWeb.LayoutHelpers do
       assign(assigns, grid_template_columns_class: grid_template_columns_class(assigns[:fraction]))
 
     ~H"""
-    <div class={"w-full grid #{@grid_template_columns_class}"}>
+    <div class={"grid #{@grid_template_columns_class}"}>
       <%= render_slot(@inner_block) %>
     </div>
     """
@@ -34,6 +34,6 @@ defmodule ChessWeb.LayoutHelpers do
   defp gap_class("6"), do: "gap-6"
   defp gap_class(nil), do: "gap-0"
 
-  defp grid_template_columns_class("3/4"), do: "grid-cols-[3fr,1fr]"
-  defp grid_template_columns_class(nil), do: "grid-cols-[1fr,1fr]"
+  defp grid_template_columns_class("3/4"), do: "grid-cols-[3fr_1fr]"
+  defp grid_template_columns_class(nil), do: "grid-cols-[1fr_1fr]"
 end

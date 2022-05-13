@@ -12,9 +12,9 @@ defmodule ChessWeb.LiveHelpers do
     assigns = assign(assigns, svg_options: svg_options)
 
     ~H"""
-      <svg {@svg_options}>
-        <use href={Routes.static_path(Endpoint, "/assets/images/chess_pieces.svg##{@color}-#{@type}")} />
-      </svg>
+    <svg {@svg_options}>
+      <use href={Routes.static_path(Endpoint, "/assets/images/chess_pieces.svg##{@color}-#{@type}")} />
+    </svg>
     """
   end
 
@@ -23,10 +23,17 @@ defmodule ChessWeb.LiveHelpers do
     assigns = assign(assigns, input_options: input_options)
 
     ~H"""
-      <.stack>
-        <%= label(@form, @field, class: "block text-gray-700 text-sm font-bold mb-2") %>
-        <%= text_input(@form, @field, [class: "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"] ++ @input_options) %>
-      </.stack>
+    <.stack>
+      <%= label(@form, @field, class: "block text-gray-700 text-sm font-bold mb-2") %>
+      <%= text_input(
+        @form,
+        @field,
+        [
+          class:
+            "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        ] ++ @input_options
+      ) %>
+    </.stack>
     """
   end
 
@@ -38,19 +45,26 @@ defmodule ChessWeb.LiveHelpers do
     """
   end
 
+  def button(assigns = %{patch: _}) do
+    button_options = assigns_to_attributes(assigns, [:patch, :size])
+    button_styles = button_styles(assigns)
+    assigns = assign(assigns, button_options: button_options, button_styles: button_styles)
+
+    ~H"""
+    <%= live_patch [to: @patch, class: @button_styles] ++ @button_options do %>
+      <%= render_slot(@inner_block) %>
+    <% end %>
+    """
+  end
+
   def button(assigns) do
     button_options = assigns_to_attributes(assigns, [:size])
-
-    button_styles =
-      case assigns[:size] do
-        "6xl" -> "text-6xl py-8 px-24"
-        _ -> "py-2 px-4"
-      end
+    button_styles = button_styles(assigns)
 
     assigns = assign(assigns, button_options: button_options, button_styles: button_styles)
 
     ~H"""
-    <button class={"border bg-blue-500 hover:bg-blue-700 text-white font-bold #{@button_styles} rounded focus:outline-none focus:shadow-outline"} {@button_options}>
+    <button class={@button_styles} {@button_options}>
       <%= render_slot(@inner_block) %>
     </button>
     """
@@ -61,11 +75,12 @@ defmodule ChessWeb.LiveHelpers do
       assign(
         assigns,
         text_class: text_class(assigns[:variant]),
+        text_align_class: text_align_class(assigns[:text_align]),
         margin_class: margin_class(assigns[:gutter])
       )
 
     ~H"""
-    <span class={"#{@text_class} #{@margin_class}"}>
+    <span class={"#{@text_class} #{@text_align_class} #{@margin_class}"}>
       <%= render_slot(@inner_block) %>
     </span>
     """
@@ -98,7 +113,7 @@ defmodule ChessWeb.LiveHelpers do
 
   def spinner(assigns) do
     ~H"""
-      <img src={Routes.static_path(Endpoint, "/assets/images/loading.svg")} />
+    <img src={Routes.static_path(Endpoint, "/assets/images/loading.svg")} />
     """
   end
 
@@ -106,8 +121,24 @@ defmodule ChessWeb.LiveHelpers do
     Routes.session_path(Endpoint, :destroy)
   end
 
+  defp button_styles(assigns) do
+    base_styles =
+      "border bg-blue-500 hover:bg-blue-700 text-center text-white font-bold rounded focus:outline-none focus:shadow-outline"
+
+    additional_styles =
+      case assigns[:size] do
+        "6xl" -> "text-6xl py-8 px-24"
+        _ -> "py-2 px-4"
+      end
+
+    Enum.join([base_styles, additional_styles], " ")
+  end
+
   defp text_class("title"), do: "text-4xl"
-  defp text_class(_), do: "text-md"
+  defp text_class("error"), do: "text-xl text-red-700"
+
+  defp text_align_class("center"), do: "text-center"
+  defp text_align_class(nil), do: ""
 
   defp margin_class("4"), do: "mb-4"
   defp margin_class(_), do: "mb-0"

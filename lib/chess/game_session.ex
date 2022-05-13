@@ -30,10 +30,6 @@ defmodule Chess.GameSession do
     GenServer.call(via(name), {:move, player, from, to})
   end
 
-  def legal_moves(name, position) do
-    GenServer.call(via(name), {:legal_moves, position})
-  end
-
   def current_state(name) do
     GenServer.call(via(name), :current_state)
   end
@@ -56,12 +52,6 @@ defmodule Chess.GameSession do
       error ->
         {:reply, error, game}
     end
-  end
-
-  def handle_call({:legal_moves, position}, _from, game) do
-    moves = Game.legal_moves(game, position)
-
-    {:reply, {:ok, moves}, game}
   end
 
   def handle_call(:current_state, _from, game) do
