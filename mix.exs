@@ -50,6 +50,7 @@ defmodule Chess.MixProject do
       {:esbuild, "~> 0.3", runtime: Mix.env() == :dev},
       {:excoveralls, "~> 0.14.4", only: :test},
       {:gettext, "~> 0.11"},
+      {:jason, "~> 1.0"},
       {:mix_test_watch, "~> 1.1.0", only: :dev, runtime: false},
       {:phoenix, "~> 1.6.6"},
       {:phoenix_html, "~> 3.0"},
