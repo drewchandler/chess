@@ -67,7 +67,7 @@ defmodule Chess.MixProject do
 
   def aliases do
     [
-      "assets.deploy": ["esbuild default --minify", "phx.digest"]
+      "assets.deploy": ["tailwind default --minify", "esbuild default --minify", "phx.digest"]
     ]
   end
 end
