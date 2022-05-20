@@ -17,9 +17,7 @@ defmodule Chess.Rules.Game do
          {:ok, piece} <- piece_at(game, from),
          :ok <- validate_piece_belongs_to_color(piece, color),
          {:ok, new_board} <- Board.move(game.board, from, to) do
-      opponent_mated =
-        new_board
-        |> CheckDetection.mate?(enemy_color(color))
+      opponent_mated = CheckDetection.mate?(new_board, enemy_color(color))
 
       {:ok, %{game | board: new_board, state: next_state(game, opponent_mated)}}
     end
@@ -33,7 +31,7 @@ defmodule Chess.Rules.Game do
 
   def color_for_player(%{players: [player, _]}, player), do: {:ok, :white}
   def color_for_player(%{players: [_, player]}, player), do: {:ok, :black}
-  def color_for_player(_, _), do: {:error, "You are not a player in this game."}
+  def color_for_player(_, player), do: {:error, "'#{player}' is not a player in this game."}
 
   def active_player(%{state: :white_turn, players: [player, _]}), do: player
   def active_player(%{state: :black_turn, players: [_, player]}), do: player
@@ -62,7 +60,6 @@ defmodule Chess.Rules.Game do
   defp next_state(%{state: :black_turn}, true), do: :black_victory
   defp next_state(%{state: :white_turn}, false), do: :black_turn
   defp next_state(%{state: :black_turn}, false), do: :white_turn
-  defp next_state(%{state: state}, _), do: state
 
   defp enemy_color(:black), do: :white
   defp enemy_color(:white), do: :black
