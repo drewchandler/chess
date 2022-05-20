@@ -87,7 +87,7 @@ defmodule ChessWeb.GameLive do
       <.split fraction="3/4">
         <.stack>
           <%= if Game.done?(@game) do %>
-            <.typography variant="title" text_align="center" gutter="6">
+            <.typography variant="title" text_align="center" gutter="4">
               <%= Game.winning_player(@game) %> won!
             </.typography>
           <% end %>
