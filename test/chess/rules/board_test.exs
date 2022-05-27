@@ -53,6 +53,136 @@ defmodule Chess.Rules.BoardTest do
     end
   end
 
+  describe "legal_moves/3" do
+    test "gives legal moves for a position with a bishop" do
+      position = Position.new(0, 0)
+
+      board = %{
+        position => Piece.new(:bishop, :white),
+        Position.new(4, 0) => Piece.new(:king, :white),
+        Position.new(4, 7) => Piece.new(:king, :black)
+      }
+
+      assert Board.legal_moves(board, position) == [
+               Position.new(7, 7),
+               Position.new(6, 6),
+               Position.new(5, 5),
+               Position.new(4, 4),
+               Position.new(3, 3),
+               Position.new(2, 2),
+               Position.new(1, 1)
+             ]
+    end
+
+    test "gives legal moves for a position with a king" do
+      position = Position.new(0, 0)
+
+      board = %{
+        position => Piece.new(:king, :white),
+        Position.new(4, 7) => Piece.new(:king, :black)
+      }
+
+      assert Board.legal_moves(board, position) == [
+               Position.new(0, 1),
+               Position.new(1, 1),
+               Position.new(1, 0)
+             ]
+    end
+
+    test "gives legal moves for a position with a knight" do
+      position = Position.new(0, 0)
+
+      board = %{
+        position => Piece.new(:knight, :white),
+        Position.new(4, 0) => Piece.new(:king, :white),
+        Position.new(4, 7) => Piece.new(:king, :black)
+      }
+
+      assert Board.legal_moves(board, position) == [
+               Position.new(1, 2),
+               Position.new(2, 1)
+             ]
+    end
+
+    test "gives legal moves for a position with a pawn" do
+      position = Position.new(0, 0)
+
+      board = %{
+        position => Piece.new(:pawn, :white),
+        Position.new(4, 0) => Piece.new(:king, :white),
+        Position.new(4, 7) => Piece.new(:king, :black)
+      }
+
+      assert Board.legal_moves(board, position) == [
+               Position.new(0, 1)
+             ]
+    end
+
+    test "gives legal moves for a position with a queen" do
+      position = Position.new(0, 0)
+
+      board = %{
+        position => Piece.new(:queen, :white),
+        Position.new(4, 0) => Piece.new(:king, :white),
+        Position.new(4, 7) => Piece.new(:king, :black)
+      }
+
+      assert Board.legal_moves(board, position) == [
+               Position.new(3, 0),
+               Position.new(2, 0),
+               Position.new(1, 0),
+               Position.new(0, 7),
+               Position.new(0, 6),
+               Position.new(0, 5),
+               Position.new(0, 4),
+               Position.new(0, 3),
+               Position.new(0, 2),
+               Position.new(0, 1),
+               Position.new(7, 7),
+               Position.new(6, 6),
+               Position.new(5, 5),
+               Position.new(4, 4),
+               Position.new(3, 3),
+               Position.new(2, 2),
+               Position.new(1, 1)
+             ]
+    end
+
+    test "gives legal moves for a position with a rook" do
+      position = Position.new(0, 0)
+
+      board = %{
+        position => Piece.new(:rook, :white),
+        Position.new(4, 0) => Piece.new(:king, :white),
+        Position.new(4, 7) => Piece.new(:king, :black)
+      }
+
+      assert Board.legal_moves(board, position) == [
+               Position.new(3, 0),
+               Position.new(2, 0),
+               Position.new(1, 0),
+               Position.new(0, 7),
+               Position.new(0, 6),
+               Position.new(0, 5),
+               Position.new(0, 4),
+               Position.new(0, 3),
+               Position.new(0, 2),
+               Position.new(0, 1)
+             ]
+    end
+
+    test "gives legal moves for an empty position" do
+      position = Position.new(0, 0)
+
+      board = %{
+        Position.new(4, 0) => Piece.new(:king, :white),
+        Position.new(4, 7) => Piece.new(:king, :black)
+      }
+
+      assert Board.legal_moves(board, position) == []
+    end
+  end
+
   describe "piece_at/2" do
     test "you can ask for the piece at a given position" do
       board = %{
