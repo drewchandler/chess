@@ -118,6 +118,64 @@ defmodule Chess.Rules.GameTest do
                     }
                 }}
     end
+
+    test "when white is checkmated the state is updated" do
+      from = Position.new(5, 5)
+      to = Position.new(5, 0)
+
+      board = %{
+        from => Piece.new(:rook, :black),
+        Position.new(7, 0) => Piece.new(:king, :white),
+        Position.new(6, 1) => Piece.new(:pawn, :white),
+        Position.new(7, 1) => Piece.new(:pawn, :white),
+        Position.new(4, 7) => Piece.new(:king, :black)
+      }
+
+      game = build_game(board: board, state: :black_turn)
+
+      assert Game.move(game, "black", from, to) ==
+               {:ok,
+                %{
+                  game
+                  | state: :black_victory,
+                    board: %{
+                      to => Piece.new(:rook, :black),
+                      Position.new(7, 0) => Piece.new(:king, :white),
+                      Position.new(6, 1) => Piece.new(:pawn, :white),
+                      Position.new(7, 1) => Piece.new(:pawn, :white),
+                      Position.new(4, 7) => Piece.new(:king, :black)
+                    }
+                }}
+    end
+
+    test "when black is checkmated the state is updated" do
+      from = Position.new(5, 4)
+      to = Position.new(5, 7)
+
+      board = %{
+        from => Piece.new(:rook, :white),
+        Position.new(7, 7) => Piece.new(:king, :black),
+        Position.new(6, 6) => Piece.new(:pawn, :black),
+        Position.new(7, 6) => Piece.new(:pawn, :black),
+        Position.new(4, 0) => Piece.new(:king, :white)
+      }
+
+      game = build_game(board: board, state: :white_turn)
+
+      assert Game.move(game, "white", from, to) ==
+               {:ok,
+                %{
+                  game
+                  | state: :white_victory,
+                    board: %{
+                      to => Piece.new(:rook, :white),
+                      Position.new(7, 7) => Piece.new(:king, :black),
+                      Position.new(6, 6) => Piece.new(:pawn, :black),
+                      Position.new(7, 6) => Piece.new(:pawn, :black),
+                      Position.new(4, 0) => Piece.new(:king, :white)
+                    }
+                }}
+    end
   end
 
   describe "done?/1" do
