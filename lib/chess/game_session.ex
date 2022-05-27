@@ -37,7 +37,7 @@ defmodule Chess.GameSession do
   def init(players) do
     players
     |> Enum.shuffle()
-    |> (&{:ok, Game.new(players: &1)}).()
+    |> then(&{:ok, Game.new(players: &1)})
   end
 
   def handle_call({:move, player, from, to}, _from, game) do
