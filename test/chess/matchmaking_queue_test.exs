@@ -42,11 +42,15 @@ defmodule Chess.MatchmakingQueueTest do
     assert join_result == {:error, "Already in the queue"}
   end
 
-  test "leaving the queue", context do
+  test "leaving the queue, removes the player from the queue", context do
     MatchmakingQueue.join(context[:queue], "player1", context[:join_callback])
     MatchmakingQueue.leave(context[:queue], "player1")
     MatchmakingQueue.join(context[:queue], "player2", context[:join_callback])
 
     refute_receive {:received, _}
+  end
+
+  test "leaving the queue when not actually in the queue does not error", context do
+    assert MatchmakingQueue.leave(context[:queue], "player1") == :ok
   end
 end
