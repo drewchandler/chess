@@ -20,6 +20,8 @@ defmodule ChessWeb.ConnCase do
       # Import conveniences for testing with connections
       import Plug.Conn
       import Phoenix.ConnTest
+      import ChessWeb.ConnCase
+
       alias ChessWeb.Router.Helpers, as: Routes
 
       # The default endpoint for testing
@@ -29,5 +31,11 @@ defmodule ChessWeb.ConnCase do
 
   setup _tags do
     {:ok, conn: Phoenix.ConnTest.build_conn()}
+  end
+
+  def log_in_user(conn, username) do
+    conn
+    |> Phoenix.ConnTest.init_test_session(%{})
+    |> Plug.Conn.put_session(:current_user, username)
   end
 end
