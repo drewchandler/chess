@@ -12,7 +12,7 @@ defmodule ChessWeb.LiveHelpers do
     assigns = assign(assigns, svg_options: svg_options)
 
     ~H"""
-    <svg {@svg_options}>
+    <svg {@svg_options} data-test-piece={"#{@color} #{@type}"}>
       <use href={Routes.static_path(Endpoint, "/assets/images/chess_pieces.svg##{@color}-#{@type}")} />
     </svg>
     """
@@ -71,16 +71,19 @@ defmodule ChessWeb.LiveHelpers do
   end
 
   def typography(assigns) do
+    options = assigns_to_attributes(assigns, [:variant, :text_align, :gutter])
+
     assigns =
       assign(
         assigns,
         text_class: text_class(assigns[:variant]),
         text_align_class: text_align_class(assigns[:text_align]),
-        margin_class: margin_class(assigns[:gutter])
+        margin_class: margin_class(assigns[:gutter]),
+        options: options
       )
 
     ~H"""
-    <span class={"#{@text_class} #{@text_align_class} #{@margin_class}"}>
+    <span class={"#{@text_class} #{@text_align_class} #{@margin_class}"} {@options}>
       <%= render_slot(@inner_block) %>
     </span>
     """

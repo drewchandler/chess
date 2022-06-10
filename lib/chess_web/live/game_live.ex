@@ -68,10 +68,12 @@ defmodule ChessWeb.GameLive do
 
   defp error_modal(assigns) do
     ~H"""
-    <.modal>
+    <.modal data-test-game-error-modal>
       <.stack gap="6">
         <.typography variant="error"><%= @error %></.typography>
-        <.button patch={Routes.lobby_path(ChessWeb.Endpoint, :index)}>Back</.button>
+        <.button patch={Routes.lobby_path(ChessWeb.Endpoint, :index)} data-test-go-back-to-lobby>
+          Back
+        </.button>
       </.stack>
     </.modal>
     """
@@ -87,7 +89,7 @@ defmodule ChessWeb.GameLive do
       <.split fraction="3/4">
         <.stack>
           <%= if Game.done?(@game) do %>
-            <.typography variant="title" text_align="center" gutter="4">
+            <.typography variant="title" text_align="center" gutter="4" data-test-result-message>
               <%= Game.winning_player(@game) %> won!
             </.typography>
           <% end %>
@@ -148,6 +150,7 @@ defmodule ChessWeb.GameLive do
       draggable={if @draggable, do: "true"}
       data-x={@x}
       data-y={@y}
+      data-test-highlighted={@highlighted}
     >
       <%= if @piece do %>
         <.piece
@@ -181,7 +184,7 @@ defmodule ChessWeb.GameLive do
       <.box>
         <.stack>
           <%= for player <- @players do %>
-            <div>
+            <div data-test-active-player={player == @active_player}>
               <%= if player == @active_player do %>
                 *
               <% end %>
