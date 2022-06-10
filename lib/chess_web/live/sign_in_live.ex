@@ -21,6 +21,7 @@ defmodule ChessWeb.SignInLive do
             action={Routes.session_path(@socket, :create)}
             phx-submit="validate"
             phx-trigger-action={@trigger_submit}
+            data-test-form="sign-in"
           >
             <.stack gap="6">
               <.input form={f} field={:username} value={@username} />

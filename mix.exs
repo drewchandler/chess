@@ -49,6 +49,7 @@ defmodule Chess.MixProject do
       {:elixir_uuid, "~> 1.2"},
       {:esbuild, "~> 0.3", runtime: Mix.env() == :dev},
       {:excoveralls, "~> 0.14.4", only: :test},
+      {:floki, ">= 0.30.0", only: :test},
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
       {:mix_test_watch, "~> 1.1.0", only: :dev, runtime: false},
