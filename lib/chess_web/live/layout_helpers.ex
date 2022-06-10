@@ -3,8 +3,11 @@ defmodule ChessWeb.LayoutHelpers do
   import Phoenix.LiveView.Helpers
 
   def center(assigns) do
+    options = assigns_to_attributes(assigns)
+    assigns = assign(assigns, options: options)
+
     ~H"""
-    <div class="w-full h-full flex flex-col items-center justify-center">
+    <div class="w-full h-full flex flex-col items-center justify-center" {@options}>
       <%= render_slot(@inner_block) %>
     </div>
     """

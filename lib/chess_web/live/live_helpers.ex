@@ -102,8 +102,11 @@ defmodule ChessWeb.LiveHelpers do
   end
 
   def modal(assigns) do
+    options = assigns_to_attributes(assigns)
+    assigns = assign(assigns, options: options)
+
     ~H"""
-    <.center>
+    <.center {@options}>
       <.box>
         <%= render_slot(@inner_block) %>
       </.box>

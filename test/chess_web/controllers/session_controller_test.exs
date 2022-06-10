@@ -15,7 +15,7 @@ defmodule ChessWeb.SessionControllerTest do
 
   describe "DELETE /session" do
     test "logs the user out", %{conn: conn} do
-      conn = conn |> log_in_user("drew") |> delete(Routes.session_path(conn, :destroy))
+      conn = conn |> sign_in_user("drew") |> delete(Routes.session_path(conn, :destroy))
 
       assert redirected_to(conn) == Routes.sign_in_path(conn, :index)
       refute get_session(conn, :current_user)

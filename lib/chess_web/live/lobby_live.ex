@@ -6,22 +6,22 @@ defmodule ChessWeb.LobbyLive do
     ~H"""
     <%= cond do %>
       <% @in_queue -> %>
-        <.modal>
+        <.modal data-test-queue-modal>
           <.stack>
             <.spinner />
-            <.button phx-click="leave-queue">Cancel</.button>
+            <.button phx-click="leave-queue" data-test-leave-queue>Cancel</.button>
           </.stack>
         </.modal>
       <% @error -> %>
         <.modal>
           <.stack>
-            <%= @error %>
-            <.button phx-click="dismiss-error">Ok</.button>
+            <span data-test-queue-error><%= @error %></span>
+            <.button phx-click="dismiss-error" data-test-dismiss-error>Ok</.button>
           </.stack>
         </.modal>
       <% true -> %>
         <.center>
-          <.button size="6xl" phx-click="join-queue">Play</.button>
+          <.button size="6xl" phx-click="join-queue" data-test-join-queue>Play</.button>
         </.center>
     <% end %>
     """

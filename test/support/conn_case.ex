@@ -33,7 +33,7 @@ defmodule ChessWeb.ConnCase do
     {:ok, conn: Phoenix.ConnTest.build_conn()}
   end
 
-  def log_in_user(conn, username) do
+  def sign_in_user(conn, username) do
     conn
     |> Phoenix.ConnTest.init_test_session(%{})
     |> Plug.Conn.put_session(:current_user, username)

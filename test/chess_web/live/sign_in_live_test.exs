@@ -5,7 +5,7 @@ defmodule ChessWeb.SignInLiveTest do
 
   describe "GET /sign-in" do
     test "redirects if already logged in", %{conn: conn} do
-      conn = conn |> log_in_user("drew") |> get(Routes.sign_in_path(conn, :index))
+      conn = conn |> sign_in_user("drew") |> get(Routes.sign_in_path(conn, :index))
 
       assert redirected_to(conn) == Routes.lobby_path(conn, :index)
     end
